@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Channels - Communism Online</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="emblem">☭</div>
+            <h1>Channels of Communication</h1>
+            <div class="nav-links">
+                <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+                <a href="{{ url_for('profile') }}" class="nav-link">Comrade Profile</a>
+                <a href="{{ url_for('logout') }}" class="nav-link">Leave Assembly</a>
+            </div>
+        </header>
+        
+        <main>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for message in messages %}
+                            <div class="flash-message">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
+            <section class="content">
+                <h2>Collective Communication Channels</h2>
+                <p>Select a channel to engage with your fellow comrades.</p>
+                
+                <div class="channels-grid">
+                    {% for channel_id, channel in channels.items() %}
+                        <div class="channel-card">
+                            <h3>{{ channel.name }}</h3>
+                            <p>{{ channel.description }}</p>
+                            <p><small>{{ channel.posts|length }} post(s)</small></p>
+                            <a href="{{ url_for('channel_view', channel_id=channel_id) }}" class="btn-cta">Enter Channel</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>The people united will never be defeated!</p>
+        </footer>
+    </div>
+</body>
+</html> 

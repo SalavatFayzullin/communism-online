@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Communism Online</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="emblem">☭</div>
+            <h1>Welcome, Comrade!</h1>
+            <div class="nav-links">
+                {% if 'username' in session %}
+                    <a href="{{ url_for('channels_list') }}" class="nav-link">Channels</a>
+                    <a href="{{ url_for('profile') }}" class="nav-link">Comrade Profile</a>
+                    <a href="{{ url_for('logout') }}" class="nav-link">Leave Assembly</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="nav-link">Enter Collective</a>
+                    <a href="{{ url_for('register') }}" class="nav-link">Join the Party</a>
+                {% endif %}
+            </div>
+        </header>
+        
+        <main>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for message in messages %}
+                            <div class="flash-message">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
+            <section class="quote">
+                <p>"Workers of the world, unite!"</p>
+                <p class="author">- Karl Marx</p>
+            </section>
+            
+            <section class="content">
+                <h2>Together for the Collective Good</h2>
+                <p>Welcome to our community where equality and solidarity are our guiding principles.</p>
+                <p>Join us in building a better future for all!</p>
+                
+                {% if 'username' not in session %}
+                    <div class="call-to-action">
+                        <a href="{{ url_for('register') }}" class="btn-cta">Join the Revolution Today</a>
+                    </div>
+                {% else %}
+                    <div class="call-to-action">
+                        <a href="{{ url_for('channels_list') }}" class="btn-cta">Explore Channels</a>
+                        <a href="{{ url_for('profile') }}" class="btn-cta secondary">View Your Party Profile</a>
+                    </div>
+                {% endif %}
+            </section>
+        </main>
+        
+        <footer>
+            <p>The people united will never be defeated!</p>
+        </footer>
+    </div>
+</body>
+</html> 

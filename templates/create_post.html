@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post - {{ channel.name }} - Communism Online</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="emblem">☭</div>
+            <h1>Create New Post</h1>
+            <div class="nav-links">
+                <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+                <a href="{{ url_for('channels_list') }}" class="nav-link">All Channels</a>
+                <a href="{{ url_for('channel_view', channel_id=channel_id) }}" class="nav-link">Back to Channel</a>
+                <a href="{{ url_for('profile') }}" class="nav-link">Comrade Profile</a>
+                <a href="{{ url_for('logout') }}" class="nav-link">Leave Assembly</a>
+            </div>
+        </header>
+        
+        <main>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for message in messages %}
+                            <div class="flash-message">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
+            <section class="content">
+                <h2>Share Your Thoughts with the Collective</h2>
+                <p>Creating new post in <strong>{{ channel.name }}</strong> channel</p>
+                
+                <form class="post-form" action="{{ url_for('create_post', channel_id=channel_id) }}" method="post">
+                    <div class="form-group">
+                        <label for="title">Title:</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="content">Content:</label>
+                        <textarea id="content" name="content" rows="10" required></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn-cta">Share with Comrades</button>
+                        <a href="{{ url_for('channel_view', channel_id=channel_id) }}" class="btn-link">Cancel</a>
+                    </div>
+                </form>
+            </section>
+        </main>
+        
+        <footer>
+            <p>The people united will never be defeated!</p>
+        </footer>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }} - Communism Online</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="emblem">☭</div>
+            <h1>{{ channel.name }}</h1>
+            <div class="nav-links">
+                <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+                <a href="{{ url_for('channels_list') }}" class="nav-link">All Channels</a>
+                <a href="{{ url_for('channel_view', channel_id=channel_id) }}" class="nav-link">Back to Channel</a>
+                <a href="{{ url_for('profile') }}" class="nav-link">Comrade Profile</a>
+                <a href="{{ url_for('logout') }}" class="nav-link">Leave Assembly</a>
+            </div>
+        </header>
+        
+        <main>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for message in messages %}
+                            <div class="flash-message">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
+            <section class="post-container">
+                <article class="post-content">
+                    <h2>{{ post.title }}</h2>
+                    <p class="post-meta">
+                        Posted by <strong>{{ post.author }}</strong> on {{ post.timestamp }}
+                    </p>
+                    <div class="post-body">
+                        {{ post.content }}
+                    </div>
+                </article>
+                
+                <div class="comments-section">
+                    <h3>Comments ({{ post.comments|length }})</h3>
+                    
+                    <form class="comment-form" action="{{ url_for('add_comment', channel_id=channel_id, post_id=post.id) }}" method="post">
+                        <div class="form-group">
+                            <label for="content">Add your voice to the collective:</label>
+                            <textarea name="content" id="content" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-cta">Share Comment</button>
+                    </form>
+                    
+                    {% if post.comments %}
+                        <div class="comments-list">
+                            {% for comment in post.comments %}
+                                <div class="comment">
+                                    <p class="comment-meta">
+                                        <strong>{{ comment.author }}</strong> on {{ comment.timestamp }}
+                                    </p>
+                                    <div class="comment-content">
+                                        {{ comment.content }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <p>No comments yet. Be the first to contribute!</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>The people united will never be defeated!</p>
+        </footer>
+    </div>
+</body>
+</html> 
