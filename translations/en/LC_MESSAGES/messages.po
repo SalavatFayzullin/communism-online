@@ -1,0 +1,463 @@
+# English translations for Communism Online.
+# Copyright (C) 2023 Communism Online Team
+# This file is distributed under the same license as the Communism Online
+# project.
+msgid ""
+msgstr ""
+"Project-Id-Version: Communism Online 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-04-17 22:42+0300\n"
+"PO-Revision-Date: 2025-04-17 22:48+0300\n"
+"Last-Translator: Claude <claude@anthropic.com>\n"
+"Language: en\n"
+"Language-Team: English\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: app.py:48
+msgid "General"
+msgstr "General"
+
+#: app.py:49
+msgid "General discussion for all comrades"
+msgstr "General discussion for all comrades"
+
+#: app.py:53
+msgid "Theory"
+msgstr "Theory"
+
+#: app.py:54
+msgid "Discussion of communist theory and literature"
+msgstr "Discussion of communist theory and literature"
+
+#: app.py:58
+msgid "News"
+msgstr "News"
+
+#: app.py:59
+msgid "Current events and news from around the world"
+msgstr "Current events and news from around the world"
+
+#: app.py:70
+msgid "Welcome to Communism Online"
+msgstr "Welcome to Communism Online"
+
+#: app.py:71
+msgid ""
+"Welcome to our platform where all comrades can share ideas for the "
+"collective good!"
+msgstr "Welcome to our platform where all comrades can share ideas for the collective good!"
+
+#: app.py:77
+msgid "First comment on our glorious platform!"
+msgstr "First comment on our glorious platform!"
+
+#: app.py:110 app.py:118 app.py:131 app.py:166 app.py:189 app.py:259 app.py:268
+msgid "You must join the ranks first, Comrade!"
+msgstr "You must join the ranks first, Comrade!"
+
+#: app.py:122 app.py:135 app.py:170 app.py:193
+msgid "This channel does not exist, Comrade!"
+msgstr "This channel does not exist, Comrade!"
+
+#: app.py:143
+msgid "All fields are required for the glory of the collective!"
+msgstr "All fields are required for the glory of the collective!"
+
+#: app.py:158
+msgid "Your message has been shared with the collective!"
+msgstr "Your message has been shared with the collective!"
+
+#: app.py:181
+msgid "This post has been redistributed, Comrade!"
+msgstr "This post has been redistributed, Comrade!"
+
+#: app.py:199
+msgid "Comments require content for the betterment of the collective!"
+msgstr "Comments require content for the betterment of the collective!"
+
+#: app.py:213
+msgid "Your comment has been added to the collective discourse!"
+msgstr "Your comment has been added to the collective discourse!"
+
+#: app.py:226
+msgid "Welcome back, Comrade!"
+msgstr "Welcome back, Comrade!"
+
+#: app.py:229
+msgid "Invalid credentials, Comrade. The Party demands accuracy!"
+msgstr "Invalid credentials, Comrade. The Party demands accuracy!"
+
+#: app.py:240
+msgid "This comrade name is already serving the cause!"
+msgstr "This comrade name is already serving the cause!"
+
+#: app.py:244 app.py:290 templates/edit_profile.html:50
+#: templates/profile.html:36
+msgid "A loyal comrade of the Party"
+msgstr "A loyal comrade of the Party"
+
+#: app.py:250
+msgid "Welcome to the ranks, Comrade!"
+msgstr "Welcome to the ranks, Comrade!"
+
+#: app.py:283
+msgid "Comrade not found in our records!"
+msgstr "Comrade not found in our records!"
+
+#: app.py:326
+#, python-brace-format
+msgid "Error saving file: {error}"
+msgstr "Error saving file: {error}"
+
+#: app.py:329
+msgid "Comrade, only image files are allowed!"
+msgstr "Comrade, only image files are allowed!"
+
+#: app.py:335
+msgid "Your profile has been updated for the glory of the collective!"
+msgstr "Your profile has been updated for the glory of the collective!"
+
+#: app.py:343
+msgid "You have left the assembly, Comrade. Return soon!"
+msgstr "You have left the assembly, Comrade. Return soon!"
+
+#: templates/base.html:6 templates/channel.html:3 templates/create_post.html:3
+#: templates/index.html:3 templates/post.html:3
+msgid "Communism Online"
+msgstr "Communism Online"
+
+#: templates/base.html:41
+msgid "The people united will never be defeated!"
+msgstr "The people united will never be defeated!"
+
+#: templates/channel.html:10 templates/channels.html:10
+#: templates/create_post.html:10 templates/edit_profile.html:10
+#: templates/login.html:10 templates/post.html:10 templates/profile.html:10
+#: templates/register.html:10
+msgid "Home"
+msgstr "Home"
+
+#: templates/channel.html:11 templates/create_post.html:11
+#: templates/post.html:11
+msgid "All Channels"
+msgstr "All Channels"
+
+#: templates/channel.html:12 templates/channels.html:11
+#: templates/create_post.html:13 templates/edit_profile.html:12
+#: templates/index.html:12 templates/post.html:13
+msgid "Comrade Profile"
+msgstr "Comrade Profile"
+
+#: templates/channel.html:13 templates/channels.html:12
+#: templates/create_post.html:14 templates/edit_profile.html:13
+#: templates/index.html:13 templates/post.html:14 templates/profile.html:12
+msgid "Leave Assembly"
+msgstr "Leave Assembly"
+
+#: templates/channel.html:20 templates/create_post.html:6
+msgid "Create New Post"
+msgstr "Create New Post"
+
+#: templates/channel.html:30 templates/post.html:22
+msgid "Posted by"
+msgstr "Posted by"
+
+#: templates/channel.html:30 templates/post.html:22 templates/post.html:45
+msgid "on"
+msgstr "on"
+
+#: templates/channel.html:36
+msgid "comment(s)"
+msgstr "comment(s)"
+
+#: templates/channel.html:38
+msgid "Read More"
+msgstr "Read More"
+
+#: templates/channel.html:44
+msgid "No posts yet in this channel, comrade!"
+msgstr "No posts yet in this channel, comrade!"
+
+#: templates/channel.html:45
+msgid "Be the first to share your thoughts with the collective."
+msgstr "Be the first to share your thoughts with the collective."
+
+#: templates/channel.html:46
+msgid "Create First Post"
+msgstr "Create First Post"
+
+#: templates/channels.html:3
+msgid "Channels - Communism Online"
+msgstr "Channels - Communism Online"
+
+#: templates/channels.html:6
+msgid "Channels of Communication"
+msgstr "Channels of Communication"
+
+#: templates/channels.html:17
+msgid "Collective Communication Channels"
+msgstr "Collective Communication Channels"
+
+#: templates/channels.html:18
+msgid "Select a channel to engage with your fellow comrades."
+msgstr "Select a channel to engage with your fellow comrades."
+
+#: templates/channels.html:25
+msgid "post(s)"
+msgstr "post(s)"
+
+#: templates/channels.html:26
+msgid "Enter Channel"
+msgstr "Enter Channel"
+
+#: templates/create_post.html:3
+msgid "Create Post"
+msgstr "Create Post"
+
+#: templates/create_post.html:12 templates/post.html:12
+msgid "Back to Channel"
+msgstr "Back to Channel"
+
+#: templates/create_post.html:19
+msgid "Share Your Thoughts with the Collective"
+msgstr "Share Your Thoughts with the Collective"
+
+#: templates/create_post.html:20
+msgid "Creating new post in"
+msgstr "Creating new post in"
+
+#: templates/create_post.html:20
+msgid "channel"
+msgstr "channel"
+
+#: templates/create_post.html:24
+msgid "Title:"
+msgstr "Title:"
+
+#: templates/create_post.html:29
+msgid "Content:"
+msgstr "Content:"
+
+#: templates/create_post.html:34
+msgid "Share with Comrades"
+msgstr "Share with Comrades"
+
+#: templates/create_post.html:35
+msgid "Cancel"
+msgstr "Cancel"
+
+#: templates/edit_profile.html:3
+msgid "Edit Comrade Profile - Communism Online"
+msgstr "Edit Comrade Profile - Communism Online"
+
+#: templates/edit_profile.html:6
+msgid "Edit Comrade Profile"
+msgstr "Edit Comrade Profile"
+
+#: templates/edit_profile.html:11 templates/index.html:11
+#: templates/profile.html:11
+msgid "Channels"
+msgstr "Channels"
+
+#: templates/edit_profile.html:20
+msgid "Comrade Name:"
+msgstr "Comrade Name:"
+
+#: templates/edit_profile.html:25
+msgid "Email Address:"
+msgstr "Email Address:"
+
+#: templates/edit_profile.html:30
+msgid "Profile Picture:"
+msgstr "Profile Picture:"
+
+#: templates/edit_profile.html:33
+msgid "Current profile picture"
+msgstr "Current profile picture"
+
+#: templates/edit_profile.html:38
+msgid "Upload a new profile picture or use an icon below"
+msgstr "Upload a new profile picture or use an icon below"
+
+#: templates/edit_profile.html:43
+msgid "Profile Icon (if no picture):"
+msgstr "Profile Icon (if no picture):"
+
+#: templates/edit_profile.html:45
+msgid "Use a communist symbol like ☭ ☪ ✮ ★ or ⚒"
+msgstr "Use a communist symbol like ☭ ☪ ✮ ★ or ⚒"
+
+#: templates/edit_profile.html:49
+msgid "Comrade Biography:"
+msgstr "Comrade Biography:"
+
+#: templates/edit_profile.html:54
+msgid "Save Changes for the Collective"
+msgstr "Save Changes for the Collective"
+
+#: templates/edit_profile.html:55
+msgid "Cancel and Return"
+msgstr "Cancel and Return"
+
+#: templates/index.html:6
+msgid "Welcome, Comrade!"
+msgstr "Welcome, Comrade!"
+
+#: templates/index.html:15 templates/register.html:11
+msgid "Enter Collective"
+msgstr "Enter Collective"
+
+#: templates/index.html:16 templates/login.html:11 templates/register.html:6
+msgid "Join the Party"
+msgstr "Join the Party"
+
+#: templates/index.html:22
+msgid "Workers of the world, unite!"
+msgstr "Workers of the world, unite!"
+
+#: templates/index.html:23 templates/profile.html:48
+msgid "- Karl Marx"
+msgstr "- Karl Marx"
+
+#: templates/index.html:27
+msgid "Together for the Collective Good"
+msgstr "Together for the Collective Good"
+
+#: templates/index.html:28
+msgid ""
+"Welcome to our community where equality and solidarity are our guiding "
+"principles."
+msgstr "Welcome to our community where equality and solidarity are our guiding principles."
+
+#: templates/index.html:29
+msgid "Join us in building a better future for all!"
+msgstr "Join us in building a better future for all!"
+
+#: templates/index.html:33
+msgid "Join the Revolution Today"
+msgstr "Join the Revolution Today"
+
+#: templates/index.html:37
+msgid "Explore Channels"
+msgstr "Explore Channels"
+
+#: templates/index.html:38
+msgid "View Your Party Profile"
+msgstr "View Your Party Profile"
+
+#: templates/login.html:3
+msgid "Login - Communism Online"
+msgstr "Login - Communism Online"
+
+#: templates/login.html:6 templates/register.html:33
+msgid "Enter the Collective"
+msgstr "Enter the Collective"
+
+#: templates/login.html:18 templates/register.html:18
+msgid "Comrade Name"
+msgstr "Comrade Name"
+
+#: templates/login.html:23 templates/register.html:23
+msgid "Party Password"
+msgstr "Party Password"
+
+#: templates/login.html:28
+msgid "Enter"
+msgstr "Enter"
+
+#: templates/login.html:33
+msgid "Not yet a member of the Party?"
+msgstr "Not yet a member of the Party?"
+
+#: templates/login.html:33
+msgid "Join Now"
+msgstr "Join Now"
+
+#: templates/post.html:30
+msgid "Comments"
+msgstr "Comments"
+
+#: templates/post.html:34
+msgid "Add your voice to the collective:"
+msgstr "Add your voice to the collective:"
+
+#: templates/post.html:37
+msgid "Share Comment"
+msgstr "Share Comment"
+
+#: templates/post.html:55
+msgid "No comments yet. Be the first to contribute!"
+msgstr "No comments yet. Be the first to contribute!"
+
+#: templates/profile.html:3
+msgid "Comrade Profile - Communism Online"
+msgstr "Comrade Profile - Communism Online"
+
+#: templates/profile.html:6
+msgid "Comrade"
+msgstr "Comrade"
+
+#: templates/profile.html:20
+msgid "Profile picture"
+msgstr "Profile picture"
+
+#: templates/profile.html:27
+msgid "Loyal Member of the Party"
+msgstr "Loyal Member of the Party"
+
+#: templates/profile.html:35
+msgid "Comrade Biography"
+msgstr "Comrade Biography"
+
+#: templates/profile.html:38
+msgid "Party Contributions"
+msgstr "Party Contributions"
+
+#: templates/profile.html:40
+msgid "Joined the revolutionary cause"
+msgstr "Joined the revolutionary cause"
+
+#: templates/profile.html:41
+msgid "Upholds the principles of equality"
+msgstr "Upholds the principles of equality"
+
+#: templates/profile.html:42
+msgid "Works for the collective good"
+msgstr "Works for the collective good"
+
+#: templates/profile.html:45
+msgid "Revolutionary Quotes"
+msgstr "Revolutionary Quotes"
+
+#: templates/profile.html:47
+msgid "\"From each according to his ability, to each according to his needs.\""
+msgstr "\"From each according to his ability, to each according to his needs.\""
+
+#: templates/profile.html:53
+msgid "Edit Party Profile"
+msgstr "Edit Party Profile"
+
+#: templates/profile.html:54
+msgid "Return to Assembly"
+msgstr "Return to Assembly"
+
+#: templates/profile.html:55
+msgid "Temporarily Leave Assembly"
+msgstr "Temporarily Leave Assembly"
+
+#: templates/register.html:3
+msgid "Register - Communism Online"
+msgstr "Register - Communism Online"
+
+#: templates/register.html:28
+msgid "Join the Revolution"
+msgstr "Join the Revolution"
+
+#: templates/register.html:33
+msgid "Already a member of the Party?"
+msgstr "Already a member of the Party?"
+

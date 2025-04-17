@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="{{ session.get('language', 'en') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ _('Communism Online') }}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/language-switcher.css') }}">
+    {% block additional_styles %}{% endblock %}
+</head>
+<body>
+    <div class="container">
+        <div class="language-switcher">
+            <a href="{{ url_for('switch_language', language='en', next=request.path) }}" class="{{ 'active' if session.get('language') == 'en' or session.get('language') is none }}">EN</a>
+            <a href="{{ url_for('switch_language', language='ru', next=request.path) }}" class="{{ 'active' if session.get('language') == 'ru' }}">RU</a>
+        </div>
+        
+        <header>
+            <div class="emblem">☭</div>
+            {% block header %}{% endblock %}
+            <div class="nav-links">
+                {% block nav_links %}{% endblock %}
+            </div>
+        </header>
+        
+        <main>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for message in messages %}
+                            <div class="flash-message">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
+            {% block content %}{% endblock %}
+        </main>
+        
+        <footer>
+            <p>{{ _('The people united will never be defeated!') }}</p>
+        </footer>
+    </div>
+</body>
+</html> 

@@ -1,76 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Comrade Profile - Communism Online</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <div class="emblem">☭</div>
-            <h1>Edit Comrade Profile</h1>
-        </header>
+{% extends "base.html" %}
+
+{% block title %}{{ _('Edit Comrade Profile - Communism Online') }}{% endblock %}
+
+{% block header %}
+<h1>{{ _('Edit Comrade Profile') }}</h1>
+{% endblock %}
+
+{% block nav_links %}
+<a href="{{ url_for('index') }}" class="nav-link">{{ _('Home') }}</a>
+<a href="{{ url_for('channels_list') }}" class="nav-link">{{ _('Channels') }}</a>
+<a href="{{ url_for('profile') }}" class="nav-link">{{ _('Comrade Profile') }}</a>
+<a href="{{ url_for('logout') }}" class="nav-link">{{ _('Leave Assembly') }}</a>
+{% endblock %}
+
+{% block content %}
+<section class="profile-card">
+    <form method="POST" action="{{ url_for('edit_profile') }}" class="edit-profile-form" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="name">{{ _('Comrade Name:') }}</label>
+            <input type="text" id="name" name="name" value="{{ user_data.get('name', username) }}" class="form-control">
+        </div>
         
-        <main>
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <div class="flash-messages">
-                        {% for message in messages %}
-                            <div class="flash-message">{{ message }}</div>
-                        {% endfor %}
-                    </div>
+        <div class="form-group">
+            <label for="email">{{ _('Email Address:') }}</label>
+            <input type="email" id="email" name="email" value="{{ user_data.get('email', '') }}" class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label for="profile_pic">{{ _('Profile Picture:') }}</label>
+            <div class="profile-pic-container">
+                {% if user_data.get('profile_pic') %}
+                    <img src="{{ url_for('static', filename='uploads/profile_pics/' + user_data.get('profile_pic')) }}" alt="{{ _('Current profile picture') }}" class="current-profile-pic">
+                {% else %}
+                    <div class="current-profile-icon">{{ user_data.get('icon', '☭') }}</div>
                 {% endif %}
-            {% endwith %}
-            
-            <section class="profile-card">
-                <form method="POST" action="{{ url_for('edit_profile') }}" class="edit-profile-form" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label for="name">Comrade Name:</label>
-                        <input type="text" id="name" name="name" value="{{ user_data.get('name', username) }}" class="form-control">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="email">Email Address:</label>
-                        <input type="email" id="email" name="email" value="{{ user_data.get('email', '') }}" class="form-control">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="profile_pic">Profile Picture:</label>
-                        <div class="profile-pic-container">
-                            {% if user_data.get('profile_pic') %}
-                                <img src="{{ url_for('static', filename='uploads/profile_pics/' + user_data.get('profile_pic')) }}" alt="Current profile picture" class="current-profile-pic">
-                            {% else %}
-                                <div class="current-profile-icon">{{ user_data.get('icon', '☭') }}</div>
-                            {% endif %}
-                            <input type="file" id="profile_pic" name="profile_pic" class="form-control file-input" accept="image/*">
-                            <p class="help-text">Upload a new profile picture or use an icon below</p>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="icon">Profile Icon (if no picture):</label>
-                        <input type="text" id="icon" name="icon" value="{{ user_data.get('icon', '☭') }}" class="form-control">
-                        <p class="help-text">Use a communist symbol like ☭ ☪ ✮ ★ or ⚒</p>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="bio">Comrade Biography:</label>
-                        <textarea id="bio" name="bio" class="form-control" rows="5">{{ user_data.get('bio', 'A loyal comrade of the Party') }}</textarea>
-                    </div>
-                    
-                    <div class="profile-actions">
-                        <button type="submit" class="btn-profile">Save Changes for the Collective</button>
-                        <a href="{{ url_for('profile') }}" class="btn-profile">Cancel and Return</a>
-                    </div>
-                </form>
-            </section>
-        </main>
+                <input type="file" id="profile_pic" name="profile_pic" class="form-control file-input" accept="image/*">
+                <p class="help-text">{{ _('Upload a new profile picture or use an icon below') }}</p>
+            </div>
+        </div>
         
-        <footer>
-            <p>The people united will never be defeated!</p>
-        </footer>
-    </div>
-</body>
-</html> 
+        <div class="form-group">
+            <label for="icon">{{ _('Profile Icon (if no picture):') }}</label>
+            <input type="text" id="icon" name="icon" value="{{ user_data.get('icon', '☭') }}" class="form-control">
+            <p class="help-text">{{ _('Use a communist symbol like ☭ ☪ ✮ ★ or ⚒') }}</p>
+        </div>
+        
+        <div class="form-group">
+            <label for="bio">{{ _('Comrade Biography:') }}</label>
+            <textarea id="bio" name="bio" class="form-control" rows="5">{{ user_data.get('bio', '') }}</textarea>
+        </div>
+        
+        <div class="profile-actions">
+            <button type="submit" class="btn-profile">{{ _('Save Changes for the Collective') }}</button>
+            <a href="{{ url_for('profile') }}" class="btn-profile">{{ _('Cancel and Return') }}</a>
+        </div>
+    </form>
+</section>
+{% endblock %} 

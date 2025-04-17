@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, g
 import os
 import secrets
 from werkzeug.utils import secure_filename
 import logging
 from datetime import datetime
+from flask_babel import Babel, gettext as _, refresh
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -15,6 +16,18 @@ app.secret_key = os.urandom(24)  # For session management
 base_dir = os.path.abspath(os.path.dirname(__file__))
 app.config['UPLOAD_FOLDER'] = os.path.join(base_dir, 'static', 'uploads', 'profile_pics')
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
+
+# Babel configuration
+app.config['BABEL_DEFAULT_LOCALE'] = 'en'
+app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
+babel = Babel(app)
+
+@babel.localeselector
+def get_locale():
+    # if a user is logged in, use the locale from the session
+    if 'language' in session:
+        return session['language']
+    return request.accept_languages.best_match(['en', 'ru', 'default'])
 
 # Create upload folder if it doesn't exist
 try:
@@ -32,18 +45,18 @@ users = {}
 # Mock channels database
 channels = {
     "general": {
-        "name": "General",
-        "description": "General discussion for all comrades",
+        "name": _("General"),
+        "description": _("General discussion for all comrades"),
         "posts": []
     },
     "theory": {
-        "name": "Theory",
-        "description": "Discussion of communist theory and literature",
+        "name": _("Theory"),
+        "description": _("Discussion of communist theory and literature"),
         "posts": []
     },
     "news": {
-        "name": "News",
-        "description": "Current events and news from around the world",
+        "name": _("News"),
+        "description": _("Current events and news from around the world"),
         "posts": []
     }
 }
@@ -54,14 +67,14 @@ example_posts = [
         "id": "post1",
         "channel": "general",
         "author": "system",
-        "title": "Welcome to Communism Online",
-        "content": "Welcome to our platform where all comrades can share ideas for the collective good!",
+        "title": _("Welcome to Communism Online"),
+        "content": _("Welcome to our platform where all comrades can share ideas for the collective good!"),
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "comments": [
             {
                 "id": "comment1",
                 "author": "system",
-                "content": "First comment on our glorious platform!",
+                "content": _("First comment on our glorious platform!"),
                 "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
         ]
@@ -76,6 +89,17 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
+@app.route('/switch_language/<language>')
+def switch_language(language):
+    # Save the current URL to redirect back to it after language switch
+    next_url = request.args.get('next') or request.referrer or url_for('index')
+    
+    # Set new language in session
+    session['language'] = language
+    refresh()  # Refresh translations
+    
+    return redirect(next_url)
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -83,7 +107,7 @@ def index():
 @app.route('/channels')
 def channels_list():
     if 'username' not in session:
-        flash('You must join the ranks first, Comrade!')
+        flash(_('You must join the ranks first, Comrade!'))
         return redirect(url_for('login'))
     
     return render_template('channels.html', channels=channels)
@@ -91,11 +115,11 @@ def channels_list():
 @app.route('/channel/<channel_id>')
 def channel_view(channel_id):
     if 'username' not in session:
-        flash('You must join the ranks first, Comrade!')
+        flash(_('You must join the ranks first, Comrade!'))
         return redirect(url_for('login'))
     
     if channel_id not in channels:
-        flash('This channel does not exist, Comrade!')
+        flash(_('This channel does not exist, Comrade!'))
         return redirect(url_for('channels_list'))
     
     channel = channels[channel_id]
@@ -104,11 +128,11 @@ def channel_view(channel_id):
 @app.route('/create_post/<channel_id>', methods=['GET', 'POST'])
 def create_post(channel_id):
     if 'username' not in session:
-        flash('You must join the ranks first, Comrade!')
+        flash(_('You must join the ranks first, Comrade!'))
         return redirect(url_for('login'))
     
     if channel_id not in channels:
-        flash('This channel does not exist, Comrade!')
+        flash(_('This channel does not exist, Comrade!'))
         return redirect(url_for('channels_list'))
     
     if request.method == 'POST':
@@ -116,7 +140,7 @@ def create_post(channel_id):
         content = request.form['content']
         
         if not title or not content:
-            flash('All fields are required for the glory of the collective!')
+            flash(_('All fields are required for the glory of the collective!'))
             return redirect(url_for('create_post', channel_id=channel_id))
         
         post_id = f"post_{secrets.token_hex(8)}"
@@ -131,7 +155,7 @@ def create_post(channel_id):
         }
         
         channels[channel_id]["posts"].insert(0, new_post)  # Add to the beginning
-        flash('Your message has been shared with the collective!')
+        flash(_('Your message has been shared with the collective!'))
         return redirect(url_for('channel_view', channel_id=channel_id))
     
     return render_template('create_post.html', channel_id=channel_id, channel=channels[channel_id])
@@ -139,11 +163,11 @@ def create_post(channel_id):
 @app.route('/post/<channel_id>/<post_id>')
 def view_post(channel_id, post_id):
     if 'username' not in session:
-        flash('You must join the ranks first, Comrade!')
+        flash(_('You must join the ranks first, Comrade!'))
         return redirect(url_for('login'))
     
     if channel_id not in channels:
-        flash('This channel does not exist, Comrade!')
+        flash(_('This channel does not exist, Comrade!'))
         return redirect(url_for('channels_list'))
     
     # Find the post
@@ -154,7 +178,7 @@ def view_post(channel_id, post_id):
             break
     
     if not post:
-        flash('This post has been redistributed, Comrade!')
+        flash(_('This post has been redistributed, Comrade!'))
         return redirect(url_for('channel_view', channel_id=channel_id))
     
     return render_template('post.html', channel_id=channel_id, post=post, channel=channels[channel_id])
@@ -162,17 +186,17 @@ def view_post(channel_id, post_id):
 @app.route('/add_comment/<channel_id>/<post_id>', methods=['POST'])
 def add_comment(channel_id, post_id):
     if 'username' not in session:
-        flash('You must join the ranks first, Comrade!')
+        flash(_('You must join the ranks first, Comrade!'))
         return redirect(url_for('login'))
     
     if channel_id not in channels:
-        flash('This channel does not exist, Comrade!')
+        flash(_('This channel does not exist, Comrade!'))
         return redirect(url_for('channels_list'))
     
     content = request.form.get('content', '')
     
     if not content:
-        flash('Comments require content for the betterment of the collective!')
+        flash(_('Comments require content for the betterment of the collective!'))
         return redirect(url_for('view_post', channel_id=channel_id, post_id=post_id))
     
     # Find the post and add the comment
@@ -186,7 +210,7 @@ def add_comment(channel_id, post_id):
                 "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
             post["comments"].append(comment)
-            flash('Your comment has been added to the collective discourse!')
+            flash(_('Your comment has been added to the collective discourse!'))
             break
     
     return redirect(url_for('view_post', channel_id=channel_id, post_id=post_id))
@@ -199,10 +223,10 @@ def login():
         
         if username in users and users[username]['password'] == password:
             session['username'] = username
-            flash('Welcome back, Comrade!')
+            flash(_('Welcome back, Comrade!'))
             return redirect(url_for('profile'))
         else:
-            flash('Invalid credentials, Comrade. The Party demands accuracy!')
+            flash(_('Invalid credentials, Comrade. The Party demands accuracy!'))
     
     return render_template('login.html')
 
@@ -213,17 +237,17 @@ def register():
         password = request.form['password']
         
         if username in users:
-            flash('This comrade name is already serving the cause!')
+            flash(_('This comrade name is already serving the cause!'))
         else:
             users[username] = {
                 'password': password,
-                'bio': 'A loyal comrade of the Party',
+                'bio': _('A loyal comrade of the Party'),
                 'name': username,
                 'email': '',
                 'icon': '☭',
                 'profile_pic': None
             }
-            flash('Welcome to the ranks, Comrade!')
+            flash(_('Welcome to the ranks, Comrade!'))
             session['username'] = username
             return redirect(url_for('profile'))
     
@@ -232,7 +256,7 @@ def register():
 @app.route('/profile')
 def profile():
     if 'username' not in session:
-        flash('You must join the ranks first, Comrade!')
+        flash(_('You must join the ranks first, Comrade!'))
         return redirect(url_for('login'))
     
     user_data = users.get(session['username'], {})
@@ -241,7 +265,7 @@ def profile():
 @app.route('/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
     if 'username' not in session:
-        flash('You must join the ranks first, Comrade!')
+        flash(_('You must join the ranks first, Comrade!'))
         return redirect(url_for('login'))
     
     # Ensure upload directory exists
@@ -256,14 +280,17 @@ def edit_profile():
     
     username = session['username']
     if username not in users:
-        flash('Comrade not found in our records!')
+        flash(_('Comrade not found in our records!'))
         return redirect(url_for('logout'))
     
     user_data = users[username]
     
     if request.method == 'POST':
-        # Update user information
-        users[username]['bio'] = request.form.get('bio', 'A loyal comrade of the Party')
+        # Update user information - Don't translate user-provided content
+        users[username]['bio'] = request.form.get('bio', '')
+        if not users[username]['bio']:
+            users[username]['bio'] = _('A loyal comrade of the Party')
+            
         users[username]['name'] = request.form.get('name', username)
         users[username]['email'] = request.form.get('email', '')
         users[username]['icon'] = request.form.get('icon', '☭')
@@ -282,7 +309,7 @@ def edit_profile():
                         
                         # Add random string to ensure uniqueness
                         random_hex = secrets.token_hex(8)
-                        _, file_ext = os.path.splitext(filename)
+                        base_name, file_ext = os.path.splitext(filename)
                         picture_filename = random_hex + file_ext
                         logger.debug(f"Generated filename: {picture_filename}")
                         
@@ -299,16 +326,16 @@ def edit_profile():
                         logger.debug(f"Updated user profile_pic to: {picture_filename}")
                     except Exception as e:
                         logger.error(f"Error saving file: {str(e)}")
-                        flash(f'Error saving file: {str(e)}')
+                        flash(_('Error saving file: {error}').format(error=str(e)))
                 else:
                     logger.warning(f"Invalid file type: {file.filename}")
-                    flash('Comrade, only image files are allowed!')
+                    flash(_('Comrade, only image files are allowed!'))
             else:
                 logger.debug("No file or empty filename")
         else:
             logger.debug("No 'profile_pic' in request.files")
         
-        flash('Your profile has been updated for the glory of the collective!')
+        flash(_('Your profile has been updated for the glory of the collective!'))
         return redirect(url_for('profile'))
     
     return render_template('edit_profile.html', username=username, user_data=user_data)
@@ -316,7 +343,7 @@ def edit_profile():
 @app.route('/logout')
 def logout():
     session.pop('username', None)
-    flash('You have left the assembly, Comrade. Return soon!')
+    flash(_('You have left the assembly, Comrade. Return soon!'))
     return redirect(url_for('index'))
 
 if __name__ == '__main__':

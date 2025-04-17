@@ -2,16 +2,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;700&display=swap');
 
 :root {
-    --dark-red: #c62828;
-    --medium-red: #e53935;
-    --light-red: #ef5350;
-    --orange: #ff6d00;
-    --light-orange: #ff9e40;
-    --yellow: #ffd600;
+    --dark-red: #ff4d4d;
+    --medium-red: #ff6b6b;
+    --light-red: #ff8080;
+    --orange: #ff9933;
+    --light-orange: #ffb366;
+    --yellow: #ffdd33;
     --beige: #f9f6f0;
-    --dark-gray: #333333;
+    --dark-gray: #444444;
     --light-gray: #f5f5f5;
     --white: #ffffff;
+    --blue: #4d94ff;
+    --green: #5cd65c;
+    --purple: #cc66ff;
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     --transition: all 0.3s ease;
 }
@@ -37,7 +40,7 @@ body {
 }
 
 header {
-    background: linear-gradient(135deg, var(--dark-red) 0%, var(--medium-red) 100%);
+    background: linear-gradient(135deg, var(--dark-red) 0%, var(--blue) 100%);
     color: var(--white);
     text-align: center;
     padding: 40px 0;
@@ -84,9 +87,9 @@ h1 {
 h2 {
     font-family: 'Montserrat', sans-serif;
     font-size: 1.8rem;
-    color: var(--dark-red);
+    color: var(--blue);
     margin-bottom: 20px;
-    border-left: 5px solid var(--dark-red);
+    border-left: 5px solid var(--blue);
     padding-left: 15px;
     font-weight: 600;
 }
@@ -108,7 +111,7 @@ h3::after {
     position: absolute;
     width: 50px;
     height: 3px;
-    background: var(--orange);
+    background: var(--green);
     bottom: 0;
     left: 0;
 }
@@ -172,7 +175,7 @@ main {
 
 /* Quote Styling */
 .quote {
-    background: linear-gradient(to right, var(--medium-red), var(--dark-red));
+    background: linear-gradient(to right, var(--medium-red), var(--purple));
     color: var(--white);
     padding: 30px;
     margin-bottom: 35px;
@@ -224,7 +227,7 @@ main {
 .btn-cta {
     display: inline-block;
     padding: 15px 30px;
-    background: linear-gradient(135deg, var(--dark-red) 0%, var(--medium-red) 100%);
+    background: linear-gradient(135deg, var(--dark-red) 0%, var(--purple) 100%);
     color: var(--white);
     text-decoration: none;
     border-radius: 50px;
@@ -233,13 +236,13 @@ main {
     letter-spacing: 1px;
     transition: var(--transition);
     border: none;
-    box-shadow: 0 4px 15px rgba(183, 28, 28, 0.3);
+    box-shadow: 0 4px 15px rgba(204, 102, 255, 0.3);
 }
 
 .btn-cta:hover {
-    background: linear-gradient(135deg, var(--medium-red) 0%, var(--dark-red) 100%);
+    background: linear-gradient(135deg, var(--purple) 0%, var(--dark-red) 100%);
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(183, 28, 28, 0.4);
+    box-shadow: 0 6px 20px rgba(204, 102, 255, 0.4);
 }
 
 /* Auth Forms */
@@ -277,9 +280,9 @@ main {
 }
 
 .form-group input:focus {
-    border-color: var(--medium-red);
+    border-color: var(--green);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.1);
+    box-shadow: 0 0 0 3px rgba(92, 214, 92, 0.1);
     background-color: var(--white);
 }
 
@@ -290,7 +293,7 @@ main {
 
 .btn-auth {
     padding: 14px 30px;
-    background: linear-gradient(135deg, var(--dark-red) 0%, var(--medium-red) 100%);
+    background: linear-gradient(135deg, var(--blue) 0%, var(--green) 100%);
     color: var(--white);
     border: none;
     border-radius: 50px;
@@ -298,15 +301,15 @@ main {
     font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
-    box-shadow: 0 4px 15px rgba(183, 28, 28, 0.3);
+    box-shadow: 0 4px 15px rgba(77, 148, 255, 0.3);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
 .btn-auth:hover {
-    background: linear-gradient(135deg, var(--medium-red) 0%, var(--dark-red) 100%);
+    background: linear-gradient(135deg, var(--green) 0%, var(--blue) 100%);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(183, 28, 28, 0.4);
+    box-shadow: 0 6px 20px rgba(77, 148, 255, 0.4);
 }
 
 .auth-links {
@@ -315,7 +318,7 @@ main {
 }
 
 .auth-links a {
-    color: var(--dark-red);
+    color: var(--blue);
     text-decoration: none;
     font-weight: 600;
     transition: var(--transition);
@@ -324,8 +327,8 @@ main {
 }
 
 .auth-links a:hover {
-    color: var(--medium-red);
-    border-bottom: 2px solid var(--medium-red);
+    color: var(--purple);
+    border-bottom: 2px solid var(--purple);
     text-decoration: none;
 }
 
@@ -356,7 +359,7 @@ main {
     align-items: center;
     justify-content: center;
     margin-right: 20px;
-    border: 3px solid var(--orange);
+    border: 3px solid var(--green);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
@@ -372,7 +375,7 @@ main {
 }
 
 .profile-status {
-    color: var(--orange);
+    color: var(--blue);
     font-weight: 600;
     font-size: 0.9rem;
 }
@@ -395,7 +398,7 @@ main {
 
 .achievements li:before {
     content: '★';
-    color: var(--orange);
+    color: var(--purple);
     position: absolute;
     left: 0;
     top: 12px;
@@ -415,7 +418,7 @@ main {
 
 .btn-profile {
     padding: 12px 20px;
-    background: linear-gradient(135deg, var(--dark-red) 0%, var(--medium-red) 100%);
+    background: linear-gradient(135deg, var(--blue) 0%, var(--green) 100%);
     color: var(--white);
     border: none;
     border-radius: 50px;
@@ -423,22 +426,22 @@ main {
     display: inline-block;
     font-weight: 600;
     transition: var(--transition);
-    box-shadow: 0 4px 15px rgba(183, 28, 28, 0.2);
+    box-shadow: 0 4px 15px rgba(77, 148, 255, 0.2);
 }
 
 .btn-profile:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(183, 28, 28, 0.3);
+    box-shadow: 0 6px 20px rgba(77, 148, 255, 0.3);
 }
 
 .btn-logout {
     background-color: transparent;
-    border: 1px solid var(--medium-red);
-    color: var(--medium-red);
+    border: 1px solid var(--purple);
+    color: var(--purple);
 }
 
 .btn-logout:hover {
-    background-color: rgba(229, 57, 53, 0.05);
+    background-color: rgba(204, 102, 255, 0.05);
 }
 
 footer {
@@ -520,9 +523,9 @@ footer {
 }
 
 .form-control:focus {
-    border-color: var(--medium-red);
+    border-color: var(--green);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.1);
+    box-shadow: 0 0 0 3px rgba(92, 214, 92, 0.1);
     background-color: var(--white);
 }
 
@@ -566,7 +569,7 @@ textarea.form-control {
     height: 120px;
     object-fit: cover;
     border-radius: 50%;
-    border: 3px solid var(--orange);
+    border: 3px solid var(--green);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -580,7 +583,7 @@ textarea.form-control {
     background: linear-gradient(135deg, var(--dark-red) 0%, var(--medium-red) 100%);
     color: var(--white);
     border-radius: 50%;
-    border: 3px solid var(--orange);
+    border: 3px solid var(--green);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -621,12 +624,15 @@ textarea.form-control {
 .badge {
     display: inline-block;
     padding: 5px 12px;
-    border-radius: 50px;
+    border-radius: 20px;
     font-size: 0.8rem;
     font-weight: 600;
-    background-color: rgba(229, 57, 53, 0.1);
-    color: var(--dark-red);
-    margin-right: 8px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    background-color: var(--blue);
+    color: var(--white);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* Avatar for comments or users */
@@ -652,12 +658,13 @@ textarea.form-control {
 }
 
 .channel-card {
-    background-color: #2a2a2a;
-    border: 1px solid #cc0000;
+    padding: 25px;
+    background-color: var(--white);
     border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border-left: 5px solid var(--green);
+    height: 100%;
 }
 
 .channel-card:hover {
@@ -673,11 +680,12 @@ textarea.form-control {
 }
 
 .channel-header {
-    background-color: #2a2a2a;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+    color: var(--white);
+    padding: 30px;
+    margin-bottom: 30px;
     border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-left: 4px solid #cc0000;
+    box-shadow: var(--shadow);
 }
 
 /* Post styles */
@@ -706,12 +714,12 @@ textarea.form-control {
 }
 
 .post-card h3 a {
-    color: #ff4d4d;
+    color: var(--blue);
     text-decoration: none;
 }
 
 .post-card h3 a:hover {
-    text-decoration: underline;
+    color: var(--purple);
 }
 
 .post-meta, .comment-meta {
@@ -732,14 +740,17 @@ textarea.form-control {
 }
 
 .btn-link {
-    display: inline-block;
-    color: #ff4d4d;
+    background: transparent;
+    border: none;
+    color: var(--blue);
+    cursor: pointer;
+    padding: 0;
     text-decoration: none;
-    font-weight: bold;
-    margin-top: 10px;
+    font-weight: 600;
 }
 
 .btn-link:hover {
+    color: var(--purple);
     text-decoration: underline;
 }
 
@@ -839,10 +850,11 @@ textarea.form-control {
 /* Empty state styling */
 .empty-state {
     text-align: center;
-    padding: 40px 20px;
-    background-color: #2a2a2a;
+    padding: 50px 20px;
+    background-color: var(--light-gray);
     border-radius: 8px;
-    margin: 20px 0;
+    border: 2px dashed var(--green);
+    margin: 30px 0;
 }
 
 .empty-state p {
@@ -852,10 +864,10 @@ textarea.form-control {
 
 /* Secondary button */
 .btn-cta.secondary {
-    background-color: #444;
-    color: #fff;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--green) 100%);
+    box-shadow: 0 4px 15px rgba(77, 148, 255, 0.2);
 }
 
 .btn-cta.secondary:hover {
-    background-color: #555;
+    background: linear-gradient(135deg, var(--green) 0%, var(--blue) 100%);
 } 

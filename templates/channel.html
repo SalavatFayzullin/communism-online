@@ -1,73 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ channel.name }} - Communism Online</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <div class="emblem">☭</div>
-            <h1>{{ channel.name }}</h1>
-            <div class="nav-links">
-                <a href="{{ url_for('index') }}" class="nav-link">Home</a>
-                <a href="{{ url_for('channels_list') }}" class="nav-link">All Channels</a>
-                <a href="{{ url_for('profile') }}" class="nav-link">Comrade Profile</a>
-                <a href="{{ url_for('logout') }}" class="nav-link">Leave Assembly</a>
-            </div>
-        </header>
-        
-        <main>
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <div class="flash-messages">
-                        {% for message in messages %}
-                            <div class="flash-message">{{ message }}</div>
-                        {% endfor %}
+{% extends "base.html" %}
+
+{% block title %}{{ channel.name }} - {{ _('Communism Online') }}{% endblock %}
+
+{% block header %}
+<h1>{{ channel.name }}</h1>
+{% endblock %}
+
+{% block nav_links %}
+<a href="{{ url_for('index') }}" class="nav-link">{{ _('Home') }}</a>
+<a href="{{ url_for('channels_list') }}" class="nav-link">{{ _('All Channels') }}</a>
+<a href="{{ url_for('profile') }}" class="nav-link">{{ _('Comrade Profile') }}</a>
+<a href="{{ url_for('logout') }}" class="nav-link">{{ _('Leave Assembly') }}</a>
+{% endblock %}
+
+{% block content %}
+<section class="channel-header">
+    <h2>{{ channel.name }}</h2>
+    <p>{{ channel.description }}</p>
+    <a href="{{ url_for('create_post', channel_id=channel_id) }}" class="btn-cta">{{ _('Create New Post') }}</a>
+</section>
+
+<section class="content">
+    {% if channel.posts %}
+        <div class="posts-list">
+            {% for post in channel.posts %}
+                <div class="post-card">
+                    <h3><a href="{{ url_for('view_post', channel_id=channel_id, post_id=post.id) }}">{{ post.title }}</a></h3>
+                    <p class="post-meta">
+                        {{ _('Posted by') }} <strong>{{ post.author }}</strong> {{ _('on') }} {{ post.timestamp }}
+                    </p>
+                    <div class="post-preview">
+                        {{ post.content[:150] }}{% if post.content|length > 150 %}...{% endif %}
                     </div>
-                {% endif %}
-            {% endwith %}
-            
-            <section class="channel-header">
-                <h2>{{ channel.name }}</h2>
-                <p>{{ channel.description }}</p>
-                <a href="{{ url_for('create_post', channel_id=channel_id) }}" class="btn-cta">Create New Post</a>
-            </section>
-            
-            <section class="content">
-                {% if channel.posts %}
-                    <div class="posts-list">
-                        {% for post in channel.posts %}
-                            <div class="post-card">
-                                <h3><a href="{{ url_for('view_post', channel_id=channel_id, post_id=post.id) }}">{{ post.title }}</a></h3>
-                                <p class="post-meta">
-                                    Posted by <strong>{{ post.author }}</strong> on {{ post.timestamp }}
-                                </p>
-                                <div class="post-preview">
-                                    {{ post.content[:150] }}{% if post.content|length > 150 %}...{% endif %}
-                                </div>
-                                <p class="post-comments">
-                                    {{ post.comments|length }} comment(s)
-                                </p>
-                                <a href="{{ url_for('view_post', channel_id=channel_id, post_id=post.id) }}" class="btn-link">Read More</a>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <div class="empty-state">
-                        <p>No posts yet in this channel, comrade!</p>
-                        <p>Be the first to share your thoughts with the collective.</p>
-                        <a href="{{ url_for('create_post', channel_id=channel_id) }}" class="btn-cta">Create First Post</a>
-                    </div>
-                {% endif %}
-            </section>
-        </main>
-        
-        <footer>
-            <p>The people united will never be defeated!</p>
-        </footer>
-    </div>
-</body>
-</html> 
+                    <p class="post-comments">
+                        {{ post.comments|length }} {{ _('comment(s)') }}
+                    </p>
+                    <a href="{{ url_for('view_post', channel_id=channel_id, post_id=post.id) }}" class="btn-link">{{ _('Read More') }}</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>{{ _('No posts yet in this channel, comrade!') }}</p>
+            <p>{{ _('Be the first to share your thoughts with the collective.') }}</p>
+            <a href="{{ url_for('create_post', channel_id=channel_id) }}" class="btn-cta">{{ _('Create First Post') }}</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %} 

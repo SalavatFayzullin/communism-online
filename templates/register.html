@@ -1,64 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Communism Online</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <div class="emblem">☭</div>
-            <h1>Join the Party</h1>
-        </header>
+{% extends "base.html" %}
+
+{% block title %}{{ _('Register - Communism Online') }}{% endblock %}
+
+{% block header %}
+<h1>{{ _('Join the Party') }}</h1>
+{% endblock %}
+
+{% block nav_links %}
+<a href="{{ url_for('index') }}" class="nav-link">{{ _('Home') }}</a>
+<a href="{{ url_for('login') }}" class="nav-link">{{ _('Enter Collective') }}</a>
+{% endblock %}
+
+{% block content %}
+<section class="form-section">
+    <form action="{{ url_for('register') }}" method="post" class="auth-form">
+        <div class="form-group">
+            <label for="username">{{ _('Comrade Name') }}</label>
+            <input type="text" id="username" name="username" required>
+        </div>
         
-        <main>
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <div class="flash-messages">
-                        {% for message in messages %}
-                            <div class="flash-message">{{ message }}</div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            {% endwith %}
-            
-            <section class="content auth-form">
-                <h2>Enlist in the Revolution</h2>
-                <p>Your contribution to the collective begins today, Comrade!</p>
-                
-                <form action="{{ url_for('register') }}" method="post">
-                    <div class="form-group">
-                        <label for="username">Choose Your Comrade Name:</label>
-                        <input type="text" id="username" name="username" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="password">Create Party Password:</label>
-                        <input type="password" id="password" name="password" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="confirm-password">Confirm Party Password:</label>
-                        <input type="password" id="confirm-password" name="confirm-password" required>
-                    </div>
-                    
-                    <div class="form-actions">
-                        <button type="submit" class="btn-auth">Join the Collective</button>
-                    </div>
-                </form>
-                
-                <div class="auth-links">
-                    <p>Already a Party member? <a href="{{ url_for('login') }}">Report for duty</a></p>
-                    <p><a href="{{ url_for('index') }}">Return to the main assembly</a></p>
-                </div>
-            </section>
-        </main>
+        <div class="form-group">
+            <label for="password">{{ _('Party Password') }}</label>
+            <input type="password" id="password" name="password" required>
+        </div>
         
-        <footer>
-            <p>The people united will never be defeated!</p>
-        </footer>
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">{{ _('Join the Revolution') }}</button>
+        </div>
+    </form>
+    
+    <div class="form-footer">
+        <p>{{ _('Already a member of the Party?') }} <a href="{{ url_for('login') }}">{{ _('Enter the Collective') }}</a></p>
     </div>
-</body>
-</html> 
+</section>
+{% endblock %} 
