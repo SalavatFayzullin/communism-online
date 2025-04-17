@@ -15,7 +15,10 @@ app.secret_key = os.urandom(24)  # For session management
 # Use absolute path for the upload folder
 base_dir = os.path.abspath(os.path.dirname(__file__))
 app.config['UPLOAD_FOLDER'] = os.path.join(base_dir, 'static', 'uploads', 'profile_pics')
+app.config['MUSIC_FOLDER'] = os.path.join(base_dir, 'static', 'uploads', 'music')
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
+app.config['ALLOWED_MUSIC_EXTENSIONS'] = {'mp3', 'wav', 'ogg'}
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB max upload
 
 # Babel configuration
 app.config['BABEL_DEFAULT_LOCALE'] = 'en'
@@ -29,15 +32,18 @@ def get_locale():
         return session['language']
     return request.accept_languages.best_match(['en', 'ru', 'default'])
 
-# Create upload folder if it doesn't exist
+# Create upload folders if they don't exist
 try:
     upload_path = app.config['UPLOAD_FOLDER']
+    music_path = app.config['MUSIC_FOLDER']
     os.makedirs(upload_path, exist_ok=True)
+    os.makedirs(music_path, exist_ok=True)
     logger.debug(f"Upload directory created/confirmed at: {upload_path}")
+    logger.debug(f"Music directory created/confirmed at: {music_path}")
     logger.debug(f"Directory exists: {os.path.exists(upload_path)}")
     logger.debug(f"Directory is writable: {os.access(upload_path, os.W_OK)}")
 except Exception as e:
-    logger.error(f"Error creating upload directory: {str(e)}")
+    logger.error(f"Error creating upload directories: {str(e)}")
 
 # Mock user database - in a real app, you would use a database
 users = {}
@@ -94,9 +100,39 @@ example_posts = [
 for post in example_posts:
     channels[post["channel"]]["posts"].append(post)
 
+# Mock music database
+music_files = [
+    {
+        'id': 'example1',
+        'title': 'The Internationale',
+        'artist': 'Pierre De Geyter',
+        'description': _('The anthem of the international communist movement'),
+        'filename': 'example_music.mp3',  # This would be a real file in production
+        'original_filename': 'the_internationale.mp3',
+        'mimetype': 'audio/mp3',
+        'uploader': 'system',
+        'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    },
+    {
+        'id': 'example2',
+        'title': 'Soviet National Anthem',
+        'artist': 'The Red Army Choir',
+        'description': _('The national anthem of the Soviet Union from 1944 to 1991'),
+        'filename': 'example_music2.mp3',  # This would be a real file in production
+        'original_filename': 'soviet_anthem.mp3',
+        'mimetype': 'audio/mp3',
+        'uploader': 'system',
+        'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+]
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+def allowed_music_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_MUSIC_EXTENSIONS']
 
 @app.route('/switch_language/<language>')
 def switch_language(language):
@@ -523,6 +559,82 @@ def logout():
     session.pop('username', None)
     flash(_('You have left the assembly, Comrade. Return soon!'))
     return redirect(url_for('index'))
+
+@app.route('/music')
+def music_library():
+    if 'username' not in session:
+        flash(_('You must join the ranks first, Comrade!'))
+        return redirect(url_for('login'))
+    
+    search_query = request.args.get('search', '').lower()
+    
+    if search_query:
+        filtered_music = [music for music in music_files if 
+                         search_query in music['title'].lower() or 
+                         search_query in music['artist'].lower() or 
+                         (music['description'] and search_query in music['description'].lower())]
+        return render_template('music.html', music_files=filtered_music)
+    
+    return render_template('music.html', music_files=music_files)
+
+@app.route('/upload_music', methods=['POST'])
+def upload_music():
+    if 'username' not in session:
+        flash(_('You must join the ranks first, Comrade!'))
+        return redirect(url_for('login'))
+    
+    if 'music_file' not in request.files:
+        flash(_('No music file selected for the revolution, Comrade!'))
+        return redirect(url_for('music_library'))
+    
+    music_file = request.files['music_file']
+    
+    if music_file.filename == '':
+        flash(_('No music file selected for the revolution, Comrade!'))
+        return redirect(url_for('music_library'))
+    
+    title = request.form.get('title', '')
+    artist = request.form.get('artist', '')
+    description = request.form.get('description', '')
+    
+    if not title or not artist:
+        flash(_('Title and artist are required for revolutionary music, Comrade!'))
+        return redirect(url_for('music_library'))
+    
+    if music_file and allowed_music_file(music_file.filename):
+        # Secure the filename
+        original_filename = secure_filename(music_file.filename)
+        filename_parts = original_filename.rsplit('.', 1)
+        random_hex = secrets.token_hex(8)
+        filename = f"{random_hex}.{filename_parts[1]}"
+        
+        # Save the file
+        filepath = os.path.join(app.config['MUSIC_FOLDER'], filename)
+        music_file.save(filepath)
+        
+        # Get the mimetype for audio playback
+        mimetype = f"audio/{filename_parts[1]}"
+        
+        # Add to music library
+        new_music = {
+            'id': random_hex,
+            'title': title,
+            'artist': artist,
+            'description': description,
+            'filename': filename,
+            'original_filename': original_filename,
+            'mimetype': mimetype,
+            'uploader': session['username'],
+            'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+        
+        music_files.append(new_music)
+        
+        flash(_('Your revolutionary music has been shared with the collective!'))
+        return redirect(url_for('music_library'))
+    
+    flash(_('Only .mp3, .wav, and .ogg files are allowed for revolutionary music!'))
+    return redirect(url_for('music_library'))
 
 if __name__ == '__main__':
     app.run(debug=True) 

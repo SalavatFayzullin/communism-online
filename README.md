@@ -34,6 +34,7 @@ A Flask web application with a communist-themed welcome page and user authentica
 - Responsive design that works on various screen sizes
 - Famous quotes and themed content
 - **Multi-language support (English and Russian)**
+- **Revolutionary music sharing and playback system**
 
 ## Language Support
 
@@ -46,3 +47,27 @@ To add a new language:
 1. Create a new directory under `translations/` with the language code
 2. Copy the translation templates and translate the strings
 3. Compile the translations with `python compile_translations.py` 
+
+## Music Library
+
+The application features a revolutionary music library where users can:
+
+- Upload music files (.mp3, .wav, .ogg)
+- Browse music shared by other comrades
+- Search for music by title, artist, or description
+- Listen to music directly in the browser 
+
+### Music Search Rules
+
+The music search functionality operates according to the following principles:
+
+1. **Case-Insensitive Matching**: All searches are performed case-insensitively, allowing users to find music regardless of capitalization.
+2. **Multi-Field Search**: The search engine examines three fields:
+   - Song title
+   - Artist name
+   - Description text
+3. **Substring Matching**: The search matches any part of the field content, not just the beginning.
+4. **Single Query Approach**: One search term is used to match across all fields simultaneously.
+5. **Empty Results Handling**: When no matches are found, a revolutionary message encourages users to contribute.
+
+The search is designed with the ideals of accessibility and community in mind, ensuring all comrades can easily find revolutionary music to inspire their cause. 

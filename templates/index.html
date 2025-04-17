@@ -10,6 +10,7 @@
 {% if 'username' in session %}
     <a href="{{ url_for('channels_list') }}" class="nav-link">{{ _('Channels') }}</a>
     <a href="{{ url_for('groups_list') }}" class="nav-link">{{ _('Collectives') }}</a>
+    <a href="{{ url_for('music_library') }}" class="nav-link">{{ _('Music') }}</a>
     <a href="{{ url_for('profile') }}" class="nav-link">{{ _('Comrade Profile') }}</a>
     <a href="{{ url_for('logout') }}" class="nav-link">{{ _('Leave Assembly') }}</a>
 {% else %}

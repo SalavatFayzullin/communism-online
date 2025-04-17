@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Revolutionary Music') }} - {{ _('Communism Online') }}{% endblock %}
+
+{% block header %}
+<h1>{{ _('Revolutionary Music Library') }}</h1>
+{% endblock %}
+
+{% block nav_links %}
+{% if 'username' in session %}
+    <a href="{{ url_for('channels_list') }}" class="nav-link">{{ _('Channels') }}</a>
+    <a href="{{ url_for('groups_list') }}" class="nav-link">{{ _('Collectives') }}</a>
+    <a href="{{ url_for('music_library') }}" class="nav-link active">{{ _('Music') }}</a>
+    <a href="{{ url_for('profile') }}" class="nav-link">{{ _('Comrade Profile') }}</a>
+    <a href="{{ url_for('logout') }}" class="nav-link">{{ _('Leave Assembly') }}</a>
+{% else %}
+    <a href="{{ url_for('login') }}" class="nav-link">{{ _('Enter Collective') }}</a>
+    <a href="{{ url_for('register') }}" class="nav-link">{{ _('Join the Party') }}</a>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="music-section">
+    <div class="music-header">
+        <h2>{{ _('Share and Listen to Revolutionary Music') }}</h2>
+        <p>{{ _('Music unites us in our revolutionary journey. Share your favorite melodies with fellow comrades.') }}</p>
+    </div>
+
+    <div class="music-upload-section">
+        <h3>{{ _('Upload New Music') }}</h3>
+        <form action="{{ url_for('upload_music') }}" method="post" enctype="multipart/form-data" class="upload-form">
+            <div class="form-group">
+                <label for="title">{{ _('Song Title') }}</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="artist">{{ _('Artist') }}</label>
+                <input type="text" id="artist" name="artist" required>
+            </div>
+            <div class="form-group">
+                <label for="description">{{ _('Description') }}</label>
+                <textarea id="description" name="description" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="music_file">{{ _('Music File') }} (.mp3, .wav, .ogg)</label>
+                <input type="file" id="music_file" name="music_file" accept=".mp3,.wav,.ogg" required>
+            </div>
+            <button type="submit" class="btn-submit">{{ _('Share with Comrades') }}</button>
+        </form>
+    </div>
+
+    <div class="music-search-section">
+        <h3>{{ _('Find Revolutionary Music') }}</h3>
+        <form action="{{ url_for('music_library') }}" method="get" class="search-form">
+            <div class="search-group">
+                <input type="text" name="search" placeholder="{{ _('Search by title, artist or description...') }}" value="{{ request.args.get('search', '') }}">
+                <button type="submit" class="btn-search">{{ _('Search') }}</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="music-library">
+        <h3>{{ _('Music Library') }}</h3>
+        {% if music_files %}
+            <div class="music-grid">
+                {% for music in music_files %}
+                <div class="music-card">
+                    <div class="music-info">
+                        <h4>{{ music.title }}</h4>
+                        <p class="artist">{{ _('By') }} {{ music.artist }}</p>
+                        <p class="uploader">{{ _('Shared by') }} {{ music.uploader }}</p>
+                        <p class="date">{{ music.timestamp }}</p>
+                        {% if music.description %}
+                        <p class="description">{{ music.description }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="music-player">
+                        <audio controls>
+                            <source src="{{ url_for('static', filename='uploads/music/' + music.filename) }}" type="{{ music.mimetype }}">
+                            {{ _('Your browser does not support audio playback.') }}
+                        </audio>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-music-message">
+                {% if request.args.get('search') %}
+                    <p>{{ _('No revolutionary music found matching your search.') }}</p>
+                {% else %}
+                    <p>{{ _('No revolutionary music has been shared yet. Be the first to contribute!') }}</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %} 

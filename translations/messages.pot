@@ -461,3 +461,107 @@ msgstr ""
 msgid "Already a member of the Party?"
 msgstr ""
 
+#: app.py:506
+msgid "Only .mp3, .wav, and .ogg files are allowed for revolutionary music!"
+msgstr ""
+
+#: app.py:508
+msgid "Your revolutionary music has been shared with the collective!"
+msgstr ""
+
+#: app.py:474
+msgid "No music file selected for the revolution, Comrade!"
+msgstr ""
+
+#: app.py:485
+msgid "Title and artist are required for revolutionary music, Comrade!"
+msgstr ""
+
+#: templates/music.html:4
+msgid "Revolutionary Music"
+msgstr ""
+
+#: templates/music.html:8
+msgid "Revolutionary Music Library"
+msgstr ""
+
+#: templates/music.html:16
+msgid "Music"
+msgstr ""
+
+#: templates/music.html:28
+msgid "Share and Listen to Revolutionary Music"
+msgstr ""
+
+#: templates/music.html:29
+msgid "Music unites us in our revolutionary journey. Share your favorite melodies with fellow comrades."
+msgstr ""
+
+#: templates/music.html:33
+msgid "Upload New Music"
+msgstr ""
+
+#: templates/music.html:37
+msgid "Song Title"
+msgstr ""
+
+#: templates/music.html:41
+msgid "Artist"
+msgstr ""
+
+#: templates/music.html:45
+msgid "Description"
+msgstr ""
+
+#: templates/music.html:49
+msgid "Music File"
+msgstr ""
+
+#: templates/music.html:52
+msgid "Share with Comrades"
+msgstr ""
+
+#: templates/music.html:57
+msgid "Find Revolutionary Music"
+msgstr ""
+
+#: templates/music.html:60
+msgid "Search by title, artist or description..."
+msgstr ""
+
+#: templates/music.html:61
+msgid "Search"
+msgstr ""
+
+#: templates/music.html:67
+msgid "Music Library"
+msgstr ""
+
+#: templates/music.html:74
+msgid "By"
+msgstr ""
+
+#: templates/music.html:75
+msgid "Shared by"
+msgstr ""
+
+#: templates/music.html:85
+msgid "Your browser does not support audio playback."
+msgstr ""
+
+#: templates/music.html:94
+msgid "No revolutionary music found matching your search."
+msgstr ""
+
+#: templates/music.html:96
+msgid "No revolutionary music has been shared yet. Be the first to contribute!"
+msgstr ""
+
+#: app.py:153
+msgid "The anthem of the international communist movement"
+msgstr ""
+
+#: app.py:163
+msgid "The national anthem of the Soviet Union from 1944 to 1991"
+msgstr ""
+
