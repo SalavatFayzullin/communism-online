@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}{{ image.title }} - {{ _('Revolutionary Gallery') }}{% endblock %}
+
+{% block header %}
+<h1>{{ _('Revolutionary Gallery Image') }}</h1>
+{% endblock %}
+
+{% block nav_links %}
+{% if 'username' in session %}
+    <a href="{{ url_for('channels_list') }}" class="nav-link">{{ _('Channels') }}</a>
+    <a href="{{ url_for('groups_list') }}" class="nav-link">{{ _('Collectives') }}</a>
+    <a href="{{ url_for('music_library') }}" class="nav-link">{{ _('Music') }}</a>
+    <a href="{{ url_for('gallery') }}" class="nav-link active">{{ _('Gallery') }}</a>
+    <a href="{{ url_for('profile') }}" class="nav-link">{{ _('Comrade Profile') }}</a>
+    <a href="{{ url_for('logout') }}" class="nav-link">{{ _('Leave Assembly') }}</a>
+{% else %}
+    <a href="{{ url_for('login') }}" class="nav-link">{{ _('Enter Collective') }}</a>
+    <a href="{{ url_for('register') }}" class="nav-link">{{ _('Join the Party') }}</a>
+{% endif %}
+{% endblock %}
+
+{% block additional_styles %}
+<style>
+    .image-view-section {
+        padding: 1rem;
+    }
+    
+    .back-link {
+        display: inline-block;
+        margin-bottom: 1rem;
+        color: #ffcc00;
+        text-decoration: none;
+    }
+    
+    .back-link:hover {
+        text-decoration: underline;
+    }
+    
+    .image-container {
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 1.5rem;
+        border-radius: 5px;
+        margin-bottom: 2rem;
+    }
+    
+    .image-full {
+        max-width: 100%;
+        max-height: 600px;
+        display: block;
+        margin: 0 auto 1.5rem;
+        border-radius: 3px;
+    }
+    
+    .image-details {
+        padding: 1rem;
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+    }
+    
+    .image-title {
+        color: #ffcc00;
+        margin-top: 0;
+    }
+    
+    .image-author, .image-date {
+        margin: 0.5rem 0;
+        font-size: 0.9rem;
+    }
+    
+    .image-description {
+        margin-top: 1rem;
+        line-height: 1.6;
+    }
+    
+    .comments-section {
+        margin-top: 2rem;
+    }
+    
+    .comments-header {
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .comment-form {
+        margin-bottom: 2rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 1.5rem;
+        border-radius: 5px;
+    }
+    
+    .comment-form textarea {
+        width: 100%;
+        padding: 0.5rem;
+        background-color: rgba(255, 255, 255, 0.2);
+        border: 1px solid #c03;
+        color: white;
+        border-radius: 3px;
+        margin-bottom: 1rem;
+    }
+    
+    .comment-form button {
+        background-color: #c03;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        border-radius: 3px;
+        transition: background-color 0.3s;
+    }
+    
+    .comment-form button:hover {
+        background-color: #e04;
+    }
+    
+    .comments-list {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .comment-item {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+        color: #000000;
+    }
+    
+    .comment-author {
+        font-weight: bold;
+        color: #ffcc00;
+    }
+    
+    .comment-date {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-left: 0.5rem;
+    }
+    
+    .comment-content {
+        margin-top: 0.5rem;
+        line-height: 1.4;
+    }
+    
+    .no-comments {
+        padding: 1rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="image-view-section">
+    <a href="{{ url_for('gallery') }}" class="back-link">« {{ _('Back to Gallery') }}</a>
+    
+    <div class="image-container">
+        <img class="image-full" src="{{ url_for('static', filename='uploads/gallery/' + image.filename) }}" alt="{{ image.title }}">
+        
+        <div class="image-details">
+            <h2 class="image-title">{{ image.title }}</h2>
+            <p class="image-author">{{ _('By:') }} <strong>{{ image.author }}</strong></p>
+            <p class="image-date">{{ _('Shared on:') }} {{ image.timestamp }}</p>
+            
+            {% if image.description %}
+            <div class="image-description">
+                <h3>{{ _('Description:') }}</h3>
+                <p>{{ image.description }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="comments-section">
+        <h3 class="comments-header">{{ _('Comments from Comrades') }}</h3>
+        
+        <div class="comment-form">
+            <form action="{{ url_for('add_gallery_comment', image_id=image.id) }}" method="post">
+                <textarea name="content" rows="3" placeholder="{{ _('Share your thoughts on this revolutionary image...') }}" required></textarea>
+                <button type="submit">{{ _('Add Comment') }}</button>
+            </form>
+        </div>
+        
+        {% if comments %}
+        <ul class="comments-list">
+            {% for comment in comments %}
+            <li class="comment-item">
+                <div class="comment-header">
+                    <span class="comment-author">{{ comment.author }}</span>
+                    <span class="comment-date">{{ comment.timestamp }}</span>
+                </div>
+                <div class="comment-content">
+                    {{ comment.content }}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <div class="no-comments">
+            <p>{{ _('Be the first to comment on this revolutionary image!') }}</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %} 

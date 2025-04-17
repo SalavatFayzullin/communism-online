@@ -16,6 +16,7 @@ app.secret_key = os.urandom(24)  # For session management
 base_dir = os.path.abspath(os.path.dirname(__file__))
 app.config['UPLOAD_FOLDER'] = os.path.join(base_dir, 'static', 'uploads', 'profile_pics')
 app.config['MUSIC_FOLDER'] = os.path.join(base_dir, 'static', 'uploads', 'music')
+app.config['GALLERY_FOLDER'] = os.path.join(base_dir, 'static', 'uploads', 'gallery')
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['ALLOWED_MUSIC_EXTENSIONS'] = {'mp3', 'wav', 'ogg'}
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB max upload
@@ -36,10 +37,13 @@ def get_locale():
 try:
     upload_path = app.config['UPLOAD_FOLDER']
     music_path = app.config['MUSIC_FOLDER']
+    gallery_path = app.config['GALLERY_FOLDER']
     os.makedirs(upload_path, exist_ok=True)
     os.makedirs(music_path, exist_ok=True)
+    os.makedirs(gallery_path, exist_ok=True)
     logger.debug(f"Upload directory created/confirmed at: {upload_path}")
     logger.debug(f"Music directory created/confirmed at: {music_path}")
+    logger.debug(f"Gallery directory created/confirmed at: {gallery_path}")
     logger.debug(f"Directory exists: {os.path.exists(upload_path)}")
     logger.debug(f"Directory is writable: {os.access(upload_path, os.W_OK)}")
 except Exception as e:
@@ -125,6 +129,12 @@ music_files = [
         'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
 ]
+
+# Mock gallery database
+gallery_images = []
+
+# Mock gallery comments database
+gallery_comments = {}
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -635,6 +645,139 @@ def upload_music():
     
     flash(_('Only .mp3, .wav, and .ogg files are allowed for revolutionary music!'))
     return redirect(url_for('music_library'))
+
+@app.route('/gallery')
+def gallery():
+    if 'username' not in session:
+        flash(_('You must join the ranks first, Comrade!'))
+        return redirect(url_for('login'))
+    
+    search_query = request.args.get('search', '').lower()
+    
+    if search_query:
+        filtered_images = [image for image in gallery_images if 
+                         search_query in image['title'].lower() or 
+                         search_query in image['author'].lower() or 
+                         (image['description'] and search_query in image['description'].lower())]
+        return render_template('gallery.html', gallery_images=filtered_images)
+    
+    return render_template('gallery.html', gallery_images=gallery_images)
+
+@app.route('/upload_image', methods=['POST'])
+def upload_image():
+    if 'username' not in session:
+        flash(_('You must join the ranks first, Comrade!'))
+        return redirect(url_for('gallery'))
+    
+    if 'image_file' not in request.files:
+        flash(_('No image file selected for the gallery, Comrade!'))
+        return redirect(url_for('gallery'))
+    
+    image_file = request.files['image_file']
+    
+    if image_file.filename == '':
+        flash(_('No image file selected for the gallery, Comrade!'))
+        return redirect(url_for('gallery'))
+    
+    title = request.form.get('title', '')
+    description = request.form.get('description', '')
+    
+    if not title:
+        flash(_('Title is required for revolutionary images, Comrade!'))
+        return redirect(url_for('gallery'))
+    
+    if image_file and allowed_file(image_file.filename):
+        # Secure the filename
+        original_filename = secure_filename(image_file.filename)
+        filename_parts = original_filename.rsplit('.', 1)
+        random_hex = secrets.token_hex(8)
+        filename = f"{random_hex}.{filename_parts[1]}"
+        
+        # Save the file
+        filepath = os.path.join(app.config['GALLERY_FOLDER'], filename)
+        image_file.save(filepath)
+        
+        # Add to gallery
+        image_id = random_hex
+        new_image = {
+            'id': image_id,
+            'title': title,
+            'description': description,
+            'filename': filename,
+            'author': session['username'],
+            'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+        
+        gallery_images.append(new_image)
+        gallery_comments[image_id] = []
+        
+        flash(_('Your revolutionary image has been shared with the collective!'))
+        return redirect(url_for('gallery'))
+    
+    flash(_('Only image files are allowed for the revolutionary gallery!'))
+    return redirect(url_for('gallery'))
+
+@app.route('/gallery_image/<image_id>')
+def gallery_image(image_id):
+    if 'username' not in session:
+        flash(_('You must join the ranks first, Comrade!'))
+        return redirect(url_for('login'))
+    
+    # Find the image
+    image = None
+    for img in gallery_images:
+        if img["id"] == image_id:
+            image = img
+            break
+    
+    if not image:
+        flash(_('This image has been redistributed, Comrade!'))
+        return redirect(url_for('gallery'))
+    
+    # Get the comments for this image
+    comments = gallery_comments.get(image_id, [])
+    
+    return render_template('gallery_image.html', image=image, comments=comments)
+
+@app.route('/add_gallery_comment/<image_id>', methods=['POST'])
+def add_gallery_comment(image_id):
+    if 'username' not in session:
+        flash(_('You must join the ranks first, Comrade!'))
+        return redirect(url_for('login'))
+    
+    # Check if the image exists
+    image_exists = False
+    for img in gallery_images:
+        if img["id"] == image_id:
+            image_exists = True
+            break
+    
+    if not image_exists:
+        flash(_('This image has been redistributed, Comrade!'))
+        return redirect(url_for('gallery'))
+    
+    content = request.form.get('content', '')
+    
+    if not content:
+        flash(_('Comments require content for the betterment of the collective!'))
+        return redirect(url_for('gallery_image', image_id=image_id))
+    
+    # Create and add the comment
+    comment_id = f"comment_{secrets.token_hex(8)}"
+    comment = {
+        "id": comment_id,
+        "author": session['username'],
+        "content": content,
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+    
+    if image_id not in gallery_comments:
+        gallery_comments[image_id] = []
+    
+    gallery_comments[image_id].append(comment)
+    flash(_('Your comment has been added to the collective discourse!'))
+    
+    return redirect(url_for('gallery_image', image_id=image_id))
 
 if __name__ == '__main__':
     app.run(debug=True) 

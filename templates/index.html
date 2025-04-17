@@ -11,6 +11,7 @@
     <a href="{{ url_for('channels_list') }}" class="nav-link">{{ _('Channels') }}</a>
     <a href="{{ url_for('groups_list') }}" class="nav-link">{{ _('Collectives') }}</a>
     <a href="{{ url_for('music_library') }}" class="nav-link">{{ _('Music') }}</a>
+    <a href="{{ url_for('gallery') }}" class="nav-link">{{ _('Gallery') }}</a>
     <a href="{{ url_for('profile') }}" class="nav-link">{{ _('Comrade Profile') }}</a>
     <a href="{{ url_for('logout') }}" class="nav-link">{{ _('Leave Assembly') }}</a>
 {% else %}
@@ -38,6 +39,7 @@
         <div class="call-to-action">
             <a href="{{ url_for('channels_list') }}" class="btn-cta">{{ _('Explore Channels') }}</a>
             <a href="{{ url_for('groups_list') }}" class="btn-cta">{{ _('Join Collectives') }}</a>
+            <a href="{{ url_for('gallery') }}" class="btn-cta">{{ _('View Gallery') }}</a>
             <a href="{{ url_for('profile') }}" class="btn-cta secondary">{{ _('View Your Party Profile') }}</a>
         </div>
     {% endif %}
