@@ -37,6 +37,7 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+    position: relative;
 }
 
 header {
@@ -50,6 +51,7 @@ header {
     border-radius: 0 0 8px 8px;
     position: relative;
     overflow: hidden;
+    z-index: 1;
 }
 
 header::before {
@@ -126,6 +128,8 @@ main {
 /* Navigation */
 .nav-links {
     margin-top: 25px;
+    position: relative;
+    z-index: 5;
 }
 
 .nav-link {
@@ -140,6 +144,7 @@ main {
     transition: var(--transition);
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
 }
 
 .nav-link:hover {

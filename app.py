@@ -42,6 +42,15 @@ except Exception as e:
 # Mock user database - in a real app, you would use a database
 users = {}
 
+# Mock groups database
+groups = {}
+
+# Track group memberships
+group_memberships = {}
+
+# Mock group chat messages
+group_messages = {}
+
 # Mock channels database
 channels = {
     "general": {
@@ -253,6 +262,166 @@ def register():
     
     return render_template('register.html')
 
+@app.route('/groups')
+def groups_list():
+    if 'username' not in session:
+        flash(_('You must join the ranks first, Comrade!'))
+        return redirect(url_for('login'))
+    
+    # Get the list of groups the user belongs to
+    user_groups = []
+    username = session['username']
+    if username in group_memberships:
+        for group_id in group_memberships[username]:
+            if group_id in groups:
+                user_groups.append(groups[group_id])
+    
+    return render_template('groups.html', groups=groups, user_groups=user_groups)
+
+@app.route('/create_group', methods=['GET', 'POST'])
+def create_group():
+    if 'username' not in session:
+        flash(_('You must join the ranks first, Comrade!'))
+        return redirect(url_for('login'))
+    
+    if request.method == 'POST':
+        name = request.form['name']
+        description = request.form['description']
+        
+        if not name or not description:
+            flash(_('All fields are required for the glory of the collective!'))
+            return redirect(url_for('create_group'))
+        
+        # Create a unique group ID
+        group_id = f"group_{secrets.token_hex(8)}"
+        
+        # Create the group
+        groups[group_id] = {
+            "id": group_id,
+            "name": name,
+            "description": description,
+            "creator": session['username'],
+            "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        }
+        
+        # Initialize group chat messages
+        group_messages[group_id] = []
+        
+        # Add creator to the group
+        username = session['username']
+        if username not in group_memberships:
+            group_memberships[username] = []
+        group_memberships[username].append(group_id)
+        
+        flash(_('New collective has been formed!'))
+        return redirect(url_for('group_view', group_id=group_id))
+    
+    return render_template('create_group.html')
+
+@app.route('/group/<group_id>')
+def group_view(group_id):
+    if 'username' not in session:
+        flash(_('You must join the ranks first, Comrade!'))
+        return redirect(url_for('login'))
+    
+    if group_id not in groups:
+        flash(_('This collective does not exist, Comrade!'))
+        return redirect(url_for('groups_list'))
+    
+    group = groups[group_id]
+    is_member = False
+    username = session['username']
+    
+    if username in group_memberships and group_id in group_memberships[username]:
+        is_member = True
+    
+    return render_template('group.html', group=group, is_member=is_member)
+
+@app.route('/join_group/<group_id>')
+def join_group(group_id):
+    if 'username' not in session:
+        flash(_('You must join the ranks first, Comrade!'))
+        return redirect(url_for('login'))
+    
+    if group_id not in groups:
+        flash(_('This collective does not exist, Comrade!'))
+        return redirect(url_for('groups_list'))
+    
+    username = session['username']
+    if username not in group_memberships:
+        group_memberships[username] = []
+    
+    if group_id not in group_memberships[username]:
+        group_memberships[username].append(group_id)
+        flash(_('You have joined the collective!'))
+    else:
+        flash(_('You are already a member of this collective!'))
+    
+    return redirect(url_for('group_view', group_id=group_id))
+
+@app.route('/leave_group/<group_id>')
+def leave_group(group_id):
+    if 'username' not in session:
+        flash(_('You must join the ranks first, Comrade!'))
+        return redirect(url_for('login'))
+    
+    if group_id not in groups:
+        flash(_('This collective does not exist, Comrade!'))
+        return redirect(url_for('groups_list'))
+    
+    username = session['username']
+    if username in group_memberships and group_id in group_memberships[username]:
+        group_memberships[username].remove(group_id)
+        flash(_('You have left the collective!'))
+    else:
+        flash(_('You are not a member of this collective!'))
+    
+    return redirect(url_for('groups_list'))
+
+@app.route('/group_chat/<group_id>', methods=['GET', 'POST'])
+def group_chat(group_id):
+    if 'username' not in session:
+        flash(_('You must join the ranks first, Comrade!'))
+        return redirect(url_for('login'))
+    
+    if group_id not in groups:
+        flash(_('This collective does not exist, Comrade!'))
+        return redirect(url_for('groups_list'))
+    
+    username = session['username']
+    # Check if user is a member of the group
+    if username not in group_memberships or group_id not in group_memberships[username]:
+        flash(_('You must join the collective to participate in discussions!'))
+        return redirect(url_for('group_view', group_id=group_id))
+    
+    # Handle new message submission
+    if request.method == 'POST':
+        message_content = request.form.get('message', '')
+        
+        if message_content:
+            # Create a new message
+            message = {
+                "id": f"msg_{secrets.token_hex(8)}",
+                "author": username,
+                "content": message_content,
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            }
+            
+            # Add message to the group chat
+            if group_id not in group_messages:
+                group_messages[group_id] = []
+            
+            group_messages[group_id].append(message)
+            
+            flash(_('Your message has been shared with the collective!'))
+            # No redirect to stay on the chat page
+    
+    # Get all messages for this group
+    messages = group_messages.get(group_id, [])
+    group = groups[group_id]
+    
+    return render_template('group_chat.html', group=group, messages=messages)
+
 @app.route('/profile')
 def profile():
     if 'username' not in session:
@@ -260,7 +429,16 @@ def profile():
         return redirect(url_for('login'))
     
     user_data = users.get(session['username'], {})
-    return render_template('profile.html', username=session['username'], user_data=user_data)
+    
+    # Get the list of groups the user belongs to
+    user_groups = []
+    username = session['username']
+    if username in group_memberships:
+        for group_id in group_memberships[username]:
+            if group_id in groups:
+                user_groups.append(groups[group_id])
+    
+    return render_template('profile.html', username=session['username'], user_data=user_data, user_groups=user_groups)
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 def edit_profile():

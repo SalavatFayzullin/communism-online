@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}{{ group.name }} | {{ _('Communism Online') }}{% endblock %}
+
+{% block header %}
+    <h1>{{ group.name }}</h1>
+{% endblock %}
+
+{% block nav_links %}
+    <a href="{{ url_for('index') }}" class="nav-link">{{ _('Home') }}</a>
+    <a href="{{ url_for('channels_list') }}" class="nav-link">{{ _('Channels') }}</a>
+    <a href="{{ url_for('groups_list') }}" class="nav-link">{{ _('Collectives') }}</a>
+    <a href="{{ url_for('profile') }}" class="nav-link">{{ _('Profile') }}</a>
+    <a href="{{ url_for('logout') }}" class="nav-link">{{ _('Logout') }}</a>
+{% endblock %}
+
+{% block additional_styles %}
+<style>
+    .group-details {
+        background-color: #3c1212;
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+    
+    .group-header {
+        margin-bottom: 15px;
+        border-bottom: 1px solid #641e1e;
+        padding-bottom: 15px;
+    }
+    
+    .group-name {
+        font-size: 1.5em;
+        color: #ffd700;
+        margin-bottom: 5px;
+    }
+    
+    .group-meta {
+        font-size: 0.9em;
+        color: #e6e6e6;
+        margin-bottom: 10px;
+    }
+    
+    .group-description {
+        color: #ffffff;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+    
+    .group-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    .action-btn {
+        display: inline-block;
+        padding: 10px 15px;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+    
+    .join-btn {
+        background-color: #cc0000;
+        color: white;
+    }
+    
+    .join-btn:hover {
+        background-color: #b30000;
+    }
+    
+    .leave-btn {
+        background-color: #4e1818;
+        color: white;
+        border: 1px solid #641e1e;
+    }
+    
+    .leave-btn:hover {
+        background-color: #641e1e;
+    }
+    
+    .chat-btn {
+        background-color: #006400;
+        color: white;
+    }
+    
+    .chat-btn:hover {
+        background-color: #005000;
+    }
+    
+    .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        color: #ffd700;
+        text-decoration: none;
+    }
+    
+    .back-link:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="group-details">
+    <div class="group-header">
+        <div class="group-name">{{ group.name }}</div>
+        <div class="group-meta">
+            {{ _('Created by') }}: {{ group.creator }} | {{ _('Date') }}: {{ group.created_at }}
+        </div>
+    </div>
+    
+    <div class="group-description">
+        <p>{{ group.description }}</p>
+    </div>
+    
+    <div class="group-actions">
+        {% if is_member %}
+            <a href="{{ url_for('group_chat', group_id=group.id) }}" class="action-btn chat-btn">{{ _('Enter Chat') }}</a>
+            <a href="{{ url_for('leave_group', group_id=group.id) }}" class="action-btn leave-btn">{{ _('Leave Collective') }}</a>
+        {% else %}
+            <a href="{{ url_for('join_group', group_id=group.id) }}" class="action-btn join-btn">{{ _('Join Collective') }}</a>
+        {% endif %}
+    </div>
+</div>
+
+<a href="{{ url_for('groups_list') }}" class="back-link">{{ _('Back to Collectives') }}</a>
+{% endblock %} 

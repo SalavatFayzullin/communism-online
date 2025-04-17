@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Create Collective') }} | {{ _('Communism Online') }}{% endblock %}
+
+{% block header %}
+    <h1>{{ _('Create Collective') }}</h1>
+{% endblock %}
+
+{% block nav_links %}
+    <a href="{{ url_for('index') }}" class="nav-link">{{ _('Home') }}</a>
+    <a href="{{ url_for('channels_list') }}" class="nav-link">{{ _('Channels') }}</a>
+    <a href="{{ url_for('groups_list') }}" class="nav-link">{{ _('Collectives') }}</a>
+    <a href="{{ url_for('profile') }}" class="nav-link">{{ _('Profile') }}</a>
+    <a href="{{ url_for('logout') }}" class="nav-link">{{ _('Logout') }}</a>
+{% endblock %}
+
+{% block additional_styles %}
+<style>
+    .create-group-form {
+        background-color: #3c1212;
+        padding: 20px;
+        border-radius: 5px;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #ffd700;
+    }
+    
+    input[type="text"], textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #641e1e;
+        border-radius: 5px;
+        background-color: #4e1818;
+        color: white;
+    }
+    
+    textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+    
+    .submit-btn {
+        display: inline-block;
+        padding: 10px 15px;
+        background-color: #cc0000;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    
+    .submit-btn:hover {
+        background-color: #b30000;
+    }
+    
+    .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        color: #ffd700;
+        text-decoration: none;
+    }
+    
+    .back-link:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="create-group-form">
+    <form method="POST" action="{{ url_for('create_group') }}">
+        <div class="form-group">
+            <label for="name">{{ _('Collective Name') }}</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="description">{{ _('Collective Description') }}</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+        
+        <button type="submit" class="submit-btn">{{ _('Create Collective') }}</button>
+    </form>
+    
+    <a href="{{ url_for('groups_list') }}" class="back-link">{{ _('Back to Collectives') }}</a>
+</div>
+{% endblock %} 

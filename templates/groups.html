@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Collectives') }} | {{ _('Communism Online') }}{% endblock %}
+
+{% block header %}
+    <h1>{{ _('Collectives') }}</h1>
+{% endblock %}
+
+{% block nav_links %}
+    <a href="{{ url_for('index') }}" class="nav-link">{{ _('Home') }}</a>
+    <a href="{{ url_for('channels_list') }}" class="nav-link">{{ _('Channels') }}</a>
+    <a href="{{ url_for('profile') }}" class="nav-link">{{ _('Profile') }}</a>
+    <a href="{{ url_for('logout') }}" class="nav-link">{{ _('Logout') }}</a>
+{% endblock %}
+
+{% block additional_styles %}
+<style>
+    .groups-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .groups-section {
+        background-color: #3c1212;
+        padding: 20px;
+        border-radius: 5px;
+    }
+    
+    .group-item {
+        background-color: #4e1818;
+        margin-bottom: 10px;
+        padding: 15px;
+        border-radius: 5px;
+        transition: transform 0.2s;
+    }
+    
+    .group-item:hover {
+        transform: translateX(5px);
+    }
+    
+    .group-name {
+        font-size: 1.2em;
+        margin-bottom: 5px;
+        color: #ffd700;
+    }
+    
+    .group-description {
+        color: #e6e6e6;
+        margin-bottom: 10px;
+    }
+    
+    .group-action {
+        text-align: right;
+    }
+    
+    .create-group-btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 15px;
+        background-color: #cc0000;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+    
+    .create-group-btn:hover {
+        background-color: #b30000;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="groups-container">
+    <section class="groups-section">
+        <h2>{{ _('Your Collectives') }}</h2>
+        {% if user_groups %}
+            {% for group in user_groups %}
+                <div class="group-item">
+                    <div class="group-name">{{ group.name }}</div>
+                    <div class="group-description">{{ group.description }}</div>
+                    <div class="group-action">
+                        <a href="{{ url_for('group_view', group_id=group.id) }}" class="action-link">{{ _('View Details') }}</a>
+                        <a href="{{ url_for('group_chat', group_id=group.id) }}" class="action-link">{{ _('Enter Chat') }}</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>{{ _('You have not joined any collectives yet.') }}</p>
+        {% endif %}
+    </section>
+    
+    <section class="groups-section">
+        <h2>{{ _('Available Collectives') }}</h2>
+        {% if groups %}
+            {% for group_id, group in groups.items() %}
+                {% if session.username not in group_memberships or group_id not in group_memberships[session.username] %}
+                    <div class="group-item">
+                        <div class="group-name">{{ group.name }}</div>
+                        <div class="group-description">{{ group.description }}</div>
+                        <div class="group-meta">{{ _('Created by') }}: {{ group.creator }}</div>
+                        <div class="group-action">
+                            <a href="{{ url_for('group_view', group_id=group.id) }}" class="action-link">{{ _('View Details') }}</a>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p>{{ _('No collectives available yet.') }}</p>
+        {% endif %}
+    </section>
+    
+    <a href="{{ url_for('create_group') }}" class="create-group-btn">{{ _('Create New Collective') }}</a>
+</div>
+{% endblock %} 

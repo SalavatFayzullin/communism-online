@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Chat') }} - {{ group.name }} | {{ _('Communism Online') }}{% endblock %}
+
+{% block header %}
+    <h1>{{ group.name }} {{ _('Chat') }}</h1>
+{% endblock %}
+
+{% block nav_links %}
+    <a href="{{ url_for('index') }}" class="nav-link">{{ _('Home') }}</a>
+    <a href="{{ url_for('channels_list') }}" class="nav-link">{{ _('Channels') }}</a>
+    <a href="{{ url_for('groups_list') }}" class="nav-link">{{ _('Collectives') }}</a>
+    <a href="{{ url_for('group_view', group_id=group.id) }}" class="nav-link">{{ _('Group Details') }}</a>
+    <a href="{{ url_for('profile') }}" class="nav-link">{{ _('Profile') }}</a>
+    <a href="{{ url_for('logout') }}" class="nav-link">{{ _('Logout') }}</a>
+{% endblock %}
+
+{% block additional_styles %}
+<style>
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        height: 70vh;
+        background-color: #3c1212;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    
+    .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 15px;
+    }
+    
+    .message {
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #4e1818;
+        position: relative;
+    }
+    
+    .message-author {
+        font-weight: bold;
+        color: #ffd700;
+        margin-bottom: 5px;
+    }
+    
+    .message-timestamp {
+        font-size: 0.8em;
+        color: #e6e6e6;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+    
+    .message-content {
+        color: white;
+        word-wrap: break-word;
+    }
+    
+    .chat-form {
+        display: flex;
+        padding: 10px;
+        background-color: #4e1818;
+        border-top: 1px solid #641e1e;
+    }
+    
+    .message-input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #641e1e;
+        border-radius: 5px;
+        background-color: #3c1212;
+        color: white;
+        margin-right: 10px;
+    }
+    
+    .send-btn {
+        padding: 10px 15px;
+        background-color: #cc0000;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    
+    .send-btn:hover {
+        background-color: #b30000;
+    }
+    
+    .no-messages {
+        text-align: center;
+        padding: 20px;
+        color: #e6e6e6;
+    }
+    
+    .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        color: #ffd700;
+        text-decoration: none;
+    }
+    
+    .back-link:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="chat-container">
+    <div class="chat-messages" id="chat-messages">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message">
+                    <div class="message-author">{{ message.author }}</div>
+                    <div class="message-timestamp">{{ message.timestamp }}</div>
+                    <div class="message-content">{{ message.content }}</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-messages">{{ _('No messages yet. Be the first to contribute to the collective discussion!') }}</div>
+        {% endif %}
+    </div>
+    
+    <form class="chat-form" method="POST" action="{{ url_for('group_chat', group_id=group.id) }}">
+        <input type="text" name="message" class="message-input" placeholder="{{ _('Type your message...') }}" required autocomplete="off">
+        <button type="submit" class="send-btn">{{ _('Send') }}</button>
+    </form>
+</div>
+
+<a href="{{ url_for('group_view', group_id=group.id) }}" class="back-link">{{ _('Back to Group Details') }}</a>
+
+<script>
+    // Scroll to the bottom of the chat on page load
+    window.onload = function() {
+        const chatMessages = document.getElementById('chat-messages');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    };
+</script>
+{% endblock %} 

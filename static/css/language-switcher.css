@@ -4,7 +4,7 @@
     right: 10px;
     display: flex;
     gap: 10px;
-    z-index: 100;
+    z-index: 1000;
 }
 
 .language-switcher a {
@@ -15,11 +15,14 @@
     text-decoration: none;
     border-radius: 3px;
     font-weight: bold;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, transform 0.2s;
+    position: relative;
+    pointer-events: auto;
 }
 
 .language-switcher a:hover {
     background-color: #666;
+    transform: translateY(-2px);
 }
 
 .language-switcher a.active {
