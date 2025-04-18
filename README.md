@@ -35,6 +35,12 @@ A Flask web application with a communist-themed welcome page and user authentica
 - Famous quotes and themed content
 - **Multi-language support (English and Russian)**
 - **Revolutionary music sharing and playback system**
+- **Collective Groups system for community organization**
+- **Revolutionary Image Gallery with commenting system**
+- **Group chat system for collective discussions**
+- **Admin panel for Party leadership oversight**
+- **User profiles with customizable icons and profile pictures**
+- **Search functionality for music and gallery images**
 
 ## Language Support
 
@@ -70,4 +76,44 @@ The music search functionality operates according to the following principles:
 4. **Single Query Approach**: One search term is used to match across all fields simultaneously.
 5. **Empty Results Handling**: When no matches are found, a revolutionary message encourages users to contribute.
 
-The search is designed with the ideals of accessibility and community in mind, ensuring all comrades can easily find revolutionary music to inspire their cause. 
+The search is designed with the ideals of accessibility and community in mind, ensuring all comrades can easily find revolutionary music to inspire their cause.
+
+## Collective Groups
+
+The application features a collective groups system where comrades can:
+
+- Create new collectives with a name and description
+- Join existing collectives to participate in group activities
+- Leave collectives at any time
+- Participate in group discussions via the group chat feature
+- View all members of a collective
+
+## Revolutionary Image Gallery
+
+The revolutionary image gallery allows comrades to:
+
+- Upload revolutionary images (.png, .jpg, .jpeg, .gif)
+- Provide titles and descriptions for each image
+- View images uploaded by other comrades
+- Comment on images to stimulate collective discourse
+- Search for images by title, author, or description
+
+## Administration Features
+
+Party leaders with administrative privileges can:
+
+- Access a dedicated admin panel
+- Remove users from the system when necessary
+- Dissolve collectives that no longer serve the revolutionary cause
+- Remove revolutionary music that doesn't align with Party values
+- Delete gallery images that don't contribute to the collective good
+
+## User Profile System
+
+The profile system allows comrades to:
+
+- Set a personalized revolutionary bio
+- Choose a symbolic icon to represent themselves
+- Upload a profile picture
+- Update personal information
+- View all collectives they've joined 
