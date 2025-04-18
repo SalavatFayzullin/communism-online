@@ -6,13 +6,6 @@
 <h1>{{ _('Edit Comrade Profile') }}</h1>
 {% endblock %}
 
-{% block nav_links %}
-<a href="{{ url_for('index') }}" class="nav-link">{{ _('Home') }}</a>
-<a href="{{ url_for('channels_list') }}" class="nav-link">{{ _('Channels') }}</a>
-<a href="{{ url_for('profile') }}" class="nav-link">{{ _('Comrade Profile') }}</a>
-<a href="{{ url_for('logout') }}" class="nav-link">{{ _('Leave Assembly') }}</a>
-{% endblock %}
-
 {% block content %}
 <section class="profile-card">
     <form method="POST" action="{{ url_for('edit_profile') }}" class="edit-profile-form" enctype="multipart/form-data">

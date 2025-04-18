@@ -50,7 +50,24 @@ except Exception as e:
     logger.error(f"Error creating upload directories: {str(e)}")
 
 # Mock user database - in a real app, you would use a database
-users = {}
+users = {
+    'admin': {
+        'password': 'admin123',
+        'bio': _('Supreme leader of the Communist Party'),
+        'name': 'Administrator',
+        'email': 'admin@communismonline.com',
+        'icon': '☭',
+        'profile_pic': None,
+        'is_admin': True  # Admin role flag
+    }
+}
+
+# Function to check if current user is an admin
+def is_admin():
+    if 'username' not in session:
+        return False
+    username = session['username']
+    return username in users and users[username].get('is_admin', False)
 
 # Mock groups database
 groups = {}
@@ -300,7 +317,8 @@ def register():
                 'name': username,
                 'email': '',
                 'icon': '☭',
-                'profile_pic': None
+                'profile_pic': None,
+                'is_admin': False  # Regular users are not admins by default
             }
             flash(_('Welcome to the ranks, Comrade!'))
             session['username'] = username
@@ -778,6 +796,135 @@ def add_gallery_comment(image_id):
     flash(_('Your comment has been added to the collective discourse!'))
     
     return redirect(url_for('gallery_image', image_id=image_id))
+
+# Admin routes
+@app.route('/admin')
+def admin_panel():
+    if 'username' not in session:
+        flash(_('You must join the ranks first, Comrade!'))
+        return redirect(url_for('login'))
+    
+    if not is_admin():
+        flash(_('Only Party leaders can access this area, Comrade!'))
+        return redirect(url_for('index'))
+    
+    return render_template('admin_panel.html', users=users, groups=groups, 
+                          music_files=music_files, gallery_images=gallery_images)
+
+@app.route('/admin/delete_user', methods=['POST'])
+def delete_user():
+    if 'username' not in session or not is_admin():
+        flash(_('Only Party leaders can perform this action, Comrade!'))
+        return redirect(url_for('index'))
+    
+    username = request.form.get('username')
+    
+    # Cannot delete admin or current user
+    if username == 'admin' or username == session['username']:
+        flash(_('This comrade cannot be removed!'))
+        return redirect(url_for('admin_panel'))
+    
+    # Delete user
+    if username in users:
+        # Remove user from all groups
+        if username in group_memberships:
+            # No need to update groups themselves since they only track creator
+            group_memberships.pop(username)
+        
+        # Delete user
+        users.pop(username)
+        flash(_('Comrade has been removed from the Party!'))
+    else:
+        flash(_('Comrade not found!'))
+    
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/delete_group', methods=['POST'])
+def delete_group():
+    if 'username' not in session or not is_admin():
+        flash(_('Only Party leaders can perform this action, Comrade!'))
+        return redirect(url_for('index'))
+    
+    group_id = request.form.get('group_id')
+    
+    if group_id in groups:
+        # Remove group from all users' memberships
+        for user, memberships in group_memberships.items():
+            if group_id in memberships:
+                memberships.remove(group_id)
+        
+        # Remove group messages
+        if group_id in group_messages:
+            group_messages.pop(group_id)
+        
+        # Remove group
+        groups.pop(group_id)
+        flash(_('Collective has been dissolved!'))
+    else:
+        flash(_('Collective not found!'))
+    
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/delete_music', methods=['POST'])
+def delete_music():
+    if 'username' not in session or not is_admin():
+        flash(_('Only Party leaders can perform this action, Comrade!'))
+        return redirect(url_for('index'))
+    
+    music_id = request.form.get('music_id')
+    
+    # Find and remove music file
+    for i, music in enumerate(music_files):
+        if music['id'] == music_id:
+            # Delete the actual file
+            try:
+                file_path = os.path.join(app.config['MUSIC_FOLDER'], music['filename'])
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+            except Exception as e:
+                logger.error(f"Error removing music file: {str(e)}")
+            
+            # Remove from list
+            music_files.pop(i)
+            flash(_('Revolutionary music has been removed!'))
+            break
+    else:
+        flash(_('Music file not found!'))
+    
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/delete_image', methods=['POST'])
+def delete_image():
+    if 'username' not in session or not is_admin():
+        flash(_('Only Party leaders can perform this action, Comrade!'))
+        return redirect(url_for('index'))
+    
+    image_id = request.form.get('image_id')
+    
+    # Find and remove image
+    for i, image in enumerate(gallery_images):
+        if image['id'] == image_id:
+            # Delete the actual file
+            try:
+                file_path = os.path.join(app.config['GALLERY_FOLDER'], image['filename'])
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+            except Exception as e:
+                logger.error(f"Error removing image file: {str(e)}")
+            
+            # Remove from list
+            gallery_images.pop(i)
+            
+            # Remove comments
+            if image_id in gallery_comments:
+                gallery_comments.pop(image_id)
+            
+            flash(_('Revolutionary image has been removed!'))
+            break
+    else:
+        flash(_('Image not found!'))
+    
+    return redirect(url_for('admin_panel'))
 
 if __name__ == '__main__':
     app.run(debug=True) 

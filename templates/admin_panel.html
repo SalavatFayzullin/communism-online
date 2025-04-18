@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Admin Panel - Communism Online') }}{% endblock %}
+
+{% block additional_styles %}
+<style>
+    .admin-panel {
+        margin: 20px 0;
+    }
+    
+    .admin-section {
+        margin-bottom: 30px;
+        background-color: #4a0000;
+        padding: 20px;
+        border-radius: 5px;
+    }
+    
+    .admin-section h2 {
+        color: #ffcc00;
+        border-bottom: 2px solid #ffcc00;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    
+    .admin-table th, .admin-table td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #761919;
+    }
+    
+    .admin-table th {
+        background-color: #5e0000;
+        color: #ffcc00;
+    }
+    
+    .admin-table tr:hover {
+        background-color: #5e0000;
+    }
+    
+    .delete-btn {
+        background-color: #a00;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    
+    .delete-btn:hover {
+        background-color: #c00;
+    }
+</style>
+{% endblock %}
+
+{% block header %}
+<h1>{{ _('Party Administration Panel') }}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="admin-panel">
+    <div class="admin-section">
+        <h2>{{ _('Manage Comrades') }}</h2>
+        {% if users %}
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>{{ _('Username') }}</th>
+                    <th>{{ _('Name') }}</th>
+                    <th>{{ _('Email') }}</th>
+                    <th>{{ _('Admin Status') }}</th>
+                    <th>{{ _('Actions') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for username, user in users.items() %}
+                <tr>
+                    <td>{{ username }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{% if user.is_admin %}{{ _('Party Leader') }}{% else %}{{ _('Comrade') }}{% endif %}</td>
+                    <td>
+                        {% if username != 'admin' and username != session['username'] %}
+                        <form action="/admin/delete_user" method="post" onsubmit="return confirm('{{ _('Are you sure you want to remove this comrade from the party?') }}');">
+                            <input type="hidden" name="username" value="{{ username }}">
+                            <button type="submit" class="delete-btn">{{ _('Remove') }}</button>
+                        </form>
+                        {% else %}
+                        {{ _('Cannot remove') }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>{{ _('No comrades found in the party.') }}</p>
+        {% endif %}
+    </div>
+
+    <div class="admin-section">
+        <h2>{{ _('Manage Collectives') }}</h2>
+        {% if groups %}
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>{{ _('Name') }}</th>
+                    <th>{{ _('Creator') }}</th>
+                    <th>{{ _('Created At') }}</th>
+                    <th>{{ _('Actions') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for group_id, group in groups.items() %}
+                <tr>
+                    <td>{{ group.name }}</td>
+                    <td>{{ group.creator }}</td>
+                    <td>{{ group.created_at }}</td>
+                    <td>
+                        <form action="/admin/delete_group" method="post" onsubmit="return confirm('{{ _('Are you sure you want to dissolve this collective?') }}');">
+                            <input type="hidden" name="group_id" value="{{ group.id }}">
+                            <button type="submit" class="delete-btn">{{ _('Dissolve') }}</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>{{ _('No collectives found in the party.') }}</p>
+        {% endif %}
+    </div>
+
+    <div class="admin-section">
+        <h2>{{ _('Manage Revolutionary Music') }}</h2>
+        {% if music_files %}
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>{{ _('Title') }}</th>
+                    <th>{{ _('Artist') }}</th>
+                    <th>{{ _('Uploader') }}</th>
+                    <th>{{ _('Actions') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for music in music_files %}
+                <tr>
+                    <td>{{ music.title }}</td>
+                    <td>{{ music.artist }}</td>
+                    <td>{{ music.uploader }}</td>
+                    <td>
+                        <form action="/admin/delete_music" method="post" onsubmit="return confirm('{{ _('Are you sure you want to remove this revolutionary music?') }}');">
+                            <input type="hidden" name="music_id" value="{{ music.id }}">
+                            <button type="submit" class="delete-btn">{{ _('Remove') }}</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>{{ _('No revolutionary music found in the party.') }}</p>
+        {% endif %}
+    </div>
+
+    <div class="admin-section">
+        <h2>{{ _('Manage Gallery') }}</h2>
+        {% if gallery_images %}
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>{{ _('Title') }}</th>
+                    <th>{{ _('Author') }}</th>
+                    <th>{{ _('Date Posted') }}</th>
+                    <th>{{ _('Actions') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for image in gallery_images %}
+                <tr>
+                    <td>{{ image.title }}</td>
+                    <td>{{ image.author }}</td>
+                    <td>{{ image.timestamp }}</td>
+                    <td>
+                        <form action="/admin/delete_image" method="post" onsubmit="return confirm('{{ _('Are you sure you want to remove this revolutionary image?') }}');">
+                            <input type="hidden" name="image_id" value="{{ image.id }}">
+                            <button type="submit" class="delete-btn">{{ _('Remove') }}</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>{{ _('No revolutionary images found in the party.') }}</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

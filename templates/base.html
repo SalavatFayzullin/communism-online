@@ -17,9 +17,22 @@
         
         <header>
             <div class="emblem">☭</div>
-            {% block header %}{% endblock %}
+            {% block header %}
+            <h1>{{ _('Communism Online') }}</h1>
+            {% endblock %}
             <div class="nav-links">
-                {% block nav_links %}{% endblock %}
+                {% if 'username' in session %}
+                    <a href="{{ url_for('index') }}" class="nav-link {% if request.path == url_for('index') %}active{% endif %}">{{ _('Home') }}</a>
+                    <a href="{{ url_for('channels_list') }}" class="nav-link {% if request.path == url_for('channels_list') %}active{% endif %}">{{ _('Channels') }}</a>
+                    <a href="{{ url_for('groups_list') }}" class="nav-link {% if request.path == url_for('groups_list') %}active{% endif %}">{{ _('Collectives') }}</a>
+                    <a href="{{ url_for('music_library') }}" class="nav-link {% if request.path == url_for('music_library') %}active{% endif %}">{{ _('Music') }}</a>
+                    <a href="{{ url_for('gallery') }}" class="nav-link {% if request.path == url_for('gallery') %}active{% endif %}">{{ _('Gallery') }}</a>
+                    <a href="{{ url_for('profile') }}" class="nav-link {% if request.path == url_for('profile') %}active{% endif %}">{{ _('Comrade Profile') }}</a>
+                    <a href="{{ url_for('logout') }}" class="nav-link">{{ _('Leave Assembly') }}</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="nav-link {% if request.path == url_for('login') %}active{% endif %}">{{ _('Enter Collective') }}</a>
+                    <a href="{{ url_for('register') }}" class="nav-link {% if request.path == url_for('register') %}active{% endif %}">{{ _('Join the Party') }}</a>
+                {% endif %}
             </div>
         </header>
         

@@ -6,20 +6,6 @@
 <h1>{{ _('Revolutionary Music Library') }}</h1>
 {% endblock %}
 
-{% block nav_links %}
-{% if 'username' in session %}
-    <a href="{{ url_for('channels_list') }}" class="nav-link">{{ _('Channels') }}</a>
-    <a href="{{ url_for('groups_list') }}" class="nav-link">{{ _('Collectives') }}</a>
-    <a href="{{ url_for('music_library') }}" class="nav-link active">{{ _('Music') }}</a>
-    <a href="{{ url_for('gallery') }}" class="nav-link">{{ _('Gallery') }}</a>
-    <a href="{{ url_for('profile') }}" class="nav-link">{{ _('Comrade Profile') }}</a>
-    <a href="{{ url_for('logout') }}" class="nav-link">{{ _('Leave Assembly') }}</a>
-{% else %}
-    <a href="{{ url_for('login') }}" class="nav-link">{{ _('Enter Collective') }}</a>
-    <a href="{{ url_for('register') }}" class="nav-link">{{ _('Join the Party') }}</a>
-{% endif %}
-{% endblock %}
-
 {% block content %}
 <section class="music-section">
     <div class="music-header">
@@ -44,7 +30,10 @@
             </div>
             <div class="form-group">
                 <label for="music_file">{{ _('Music File') }} (.mp3, .wav, .ogg)</label>
-                <input type="file" id="music_file" name="music_file" accept=".mp3,.wav,.ogg" required>
+                <div class="custom-file-upload">
+                    <input type="file" id="music_file" name="music_file" accept=".mp3,.wav,.ogg" required class="file-input">
+                    <div class="file-placeholder">{{ _('Select revolutionary music to share') }} <span class="music-icon">♫</span></div>
+                </div>
             </div>
             <button type="submit" class="btn-submit">{{ _('Share with Comrades') }}</button>
         </form>

@@ -6,16 +6,6 @@
 <h1>{{ _('Comrade') }} {{ username }}</h1>
 {% endblock %}
 
-{% block nav_links %}
-<a href="{{ url_for('index') }}" class="nav-link">{{ _('Home') }}</a>
-<a href="{{ url_for('channels_list') }}" class="nav-link">{{ _('Channels') }}</a>
-<a href="{{ url_for('groups_list') }}" class="nav-link">{{ _('Collectives') }}</a>
-<a href="{{ url_for('music_library') }}" class="nav-link">{{ _('Music') }}</a>
-<a href="{{ url_for('gallery') }}" class="nav-link">{{ _('Gallery') }}</a>
-<a href="{{ url_for('profile') }}" class="nav-link active">{{ _('Comrade Profile') }}</a>
-<a href="{{ url_for('logout') }}" class="nav-link">{{ _('Leave Assembly') }}</a>
-{% endblock %}
-
 {% block content %}
 <section class="profile-card">
     <div class="profile-header">
@@ -70,6 +60,9 @@
     <div class="profile-actions">
         <a href="{{ url_for('edit_profile') }}" class="btn-profile">{{ _('Edit Party Profile') }}</a>
         <a href="{{ url_for('groups_list') }}" class="btn-profile">{{ _('Manage Collectives') }}</a>
+        {% if user_data.get('is_admin') %}
+        <a href="{{ url_for('admin_panel') }}" class="btn-profile">{{ _('Party Administration') }}</a>
+        {% endif %}
         <a href="{{ url_for('index') }}" class="btn-profile">{{ _('Return to Assembly') }}</a>
         <a href="{{ url_for('logout') }}" class="btn-profile btn-logout">{{ _('Temporarily Leave Assembly') }}</a>
     </div>

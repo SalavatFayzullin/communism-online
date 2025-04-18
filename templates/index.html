@@ -6,20 +6,6 @@
 <h1>{{ _('Welcome, Comrade!') }}</h1>
 {% endblock %}
 
-{% block nav_links %}
-{% if 'username' in session %}
-    <a href="{{ url_for('channels_list') }}" class="nav-link">{{ _('Channels') }}</a>
-    <a href="{{ url_for('groups_list') }}" class="nav-link">{{ _('Collectives') }}</a>
-    <a href="{{ url_for('music_library') }}" class="nav-link">{{ _('Music') }}</a>
-    <a href="{{ url_for('gallery') }}" class="nav-link">{{ _('Gallery') }}</a>
-    <a href="{{ url_for('profile') }}" class="nav-link">{{ _('Comrade Profile') }}</a>
-    <a href="{{ url_for('logout') }}" class="nav-link">{{ _('Leave Assembly') }}</a>
-{% else %}
-    <a href="{{ url_for('login') }}" class="nav-link">{{ _('Enter Collective') }}</a>
-    <a href="{{ url_for('register') }}" class="nav-link">{{ _('Join the Party') }}</a>
-{% endif %}
-{% endblock %}
-
 {% block content %}
 <section class="quote">
     <p>{{ _('Workers of the world, unite!') }}</p>
